@@ -27,9 +27,9 @@ button:focus-visible,textarea:focus-visible{outline:3px solid #9ab9c7;outline-of
 #textInput{position:relative;display:block;resize:vertical;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--ink);border:0;outline:none;overflow:auto}
 #textInput::selection{background:#9ab9c777}
 .mword{position:relative;display:inline-block;white-space:pre;vertical-align:baseline}
-.mword .symbol{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 5px);width:28px;height:28px;object-fit:contain}
-.small-symbols #mirror .symbol{width:20px;height:20px;bottom:calc(100% + 7px)}
-.large-symbols #mirror .symbol{width:38px;height:38px;bottom:calc(100% + 2px)}
+.mword .symbol{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 1px);width:28px;height:28px;object-fit:contain}
+.small-symbols #mirror .symbol{width:20px;height:20px;bottom:calc(100% + 0px)}
+.large-symbols #mirror .symbol{width:38px;height:38px;bottom:calc(100% + 0px)}
 .text-small #mirror,#textInput.text-small{font-size:18px}
 .text-large #mirror,#textInput.text-large{font-size:28px}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
@@ -38,17 +38,41 @@ button:focus-visible,textarea:focus-visible{outline:3px solid #9ab9c7;outline-of
 footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
 @media(max-width:520px){main{padding:10px}.panel{padding:12px}.group{flex-basis:100%}#mirror,#textInput{font-size:20px;padding-left:12px;padding-right:12px}}
 @media print{body{background:white}.toolbar,.actions,.hint,header .subtitle{display:none}.panel{border:0;box-shadow:none}#textInput{color:transparent}}
+
+.text-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}
+.text-heading label{margin:0}
+.align-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.align-controls>span{font-size:14px;color:var(--muted);margin-right:3px}
+.align-controls button{min-height:36px;min-width:40px;padding:5px 9px;border-radius:8px}
+.align-controls button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
+.align-icon{display:block;font-size:20px;line-height:1;letter-spacing:-3px;transform:scaleX(.9)}
+.center-icon{text-align:center}
+.right-icon{text-align:right}
+#mirror{text-align:left}
+#textInput{text-align:left}
+#editorShell.align-center #mirror,#editorShell.align-center #textInput{text-align:center}
+#editorShell.align-right #mirror,#editorShell.align-right #textInput{text-align:right}
+
 </style>
 </head>
 <body>
 <header><h1>Vārdi un simboli</h1><p class="subtitle">Raksti tekstu — simboli parādīsies virs atpazītajiem vārdiem.</p></header>
 <main><section class="panel">
+
+<div class="text-heading">
+<label for="textInput">Tavs teksts</label>
+<div class="align-controls" role="group" aria-label="Teksta un simbolu izlīdzinājums">
+<span>Izlīdzinājums:</span>
+<button type="button" data-align="left" aria-label="Pa kreisi" aria-pressed="true"><span class="align-icon">☰</span></button>
+<button type="button" data-align="center" aria-label="Centrā" aria-pressed="false"><span class="align-icon center-icon">☰</span></button>
+<button type="button" data-align="right" aria-label="Pa labi" aria-pressed="false"><span class="align-icon right-icon">☰</span></button>
+</div>
+</div>
+<div class="editor-shell" id="editorShell"><div id="mirror" aria-hidden="true"></div><textarea id="textInput" spellcheck="false" aria-label="Raksti vai ielīmē tekstu">Kaķis sēž uz krēsla.</textarea></div>
 <div class="toolbar">
 <div class="group"><label>Simbolu lielums</label><div class="btnrow" role="group" aria-label="Simbolu lielums"><button data-symbol="small" aria-pressed="false">Mazs</button><button data-symbol="medium" aria-pressed="true">Vidējs</button><button data-symbol="large" aria-pressed="false">Liels</button></div></div>
 <div class="group"><label>Teksta lielums</label><div class="btnrow" role="group" aria-label="Teksta lielums"><button data-text="small" aria-pressed="false">Mazs</button><button data-text="medium" aria-pressed="true">Vidējs</button><button data-text="large" aria-pressed="false">Liels</button></div></div>
 </div>
-<label for="textInput">Tavs teksts</label>
-<div class="editor-shell" id="editorShell"><div id="mirror" aria-hidden="true"></div><textarea id="textInput" spellcheck="false" aria-label="Raksti vai ielīmē tekstu">Kaķis sēž uz krēsla.</textarea></div>
 <div class="actions"><button class="primary" id="copyBtn">Kopēt tekstu</button><button id="printBtn">Drukāt</button><button id="clearBtn">Notīrīt</button></div>
 <p class="hint">Raksti, dzēs un ielīmē tekstu parastajā teksta laukā. Tas saglabā latviešu burtus un pieturzīmes. Simboli ir prototipa piemēri, nevis oficiālie ARASAAC simboli.</p>
 </section></main><footer>Vārdi un simboli · prototips</footer>
@@ -71,6 +95,28 @@ document.querySelectorAll('[data-symbol]').forEach(b=>b.onclick=()=>{shell.class
 document.querySelectorAll('[data-text]').forEach(b=>b.onclick=()=>{mirror.classList.remove('text-small','text-large');input.classList.remove('text-small','text-large');if(b.dataset.text!=='medium'){mirror.classList.add('text-'+b.dataset.text);input.classList.add('text-'+b.dataset.text)}document.querySelectorAll('[data-text]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});
 document.getElementById('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(input.value);alert('Teksts nokopēts.')}catch(e){input.focus();input.select();alert('Teksts ir iezīmēts. Izvēlies Kopēt savā iPad izvēlnē.')}};
 document.getElementById('clearBtn').onclick=()=>{if(confirm('Vai tiešām notīrīt tekstu?')){input.value='';render();input.focus()}};
-document.getElementById('printBtn').onclick=()=>{const w=window.open('','_blank');if(!w){window.print();return}w.document.write('<!doctype html><html lang="lv"><meta charset="utf-8"><title>Vārdi un simboli</title><style>body{font-family:Arial;padding:24px;color:#263541}p{font-size:22px;line-height:1.8;white-space:pre-wrap}</style><p>'+input.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p></html>');w.document.close();w.focus();w.print()};
+document.getElementById('printBtn').onclick=()=>{const w=window.open('','_blank');if(!w){window.print();return}w.document.write('<!doctype html><html lang="lv"><meta charset="utf-8"><title>Vārdi un simboli</title><style>body{font-family:Arial;padding:24px;color:#263541}p{font-size:22px;line-height:1.8;white-space:pre-wrap}
+.text-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}
+.text-heading label{margin:0}
+.align-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.align-controls>span{font-size:14px;color:var(--muted);margin-right:3px}
+.align-controls button{min-height:36px;min-width:40px;padding:5px 9px;border-radius:8px}
+.align-controls button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
+.align-icon{display:block;font-size:20px;line-height:1;letter-spacing:-3px;transform:scaleX(.9)}
+.center-icon{text-align:center}
+.right-icon{text-align:right}
+#mirror{text-align:left}
+#textInput{text-align:left}
+#editorShell.align-center #mirror,#editorShell.align-center #textInput{text-align:center}
+#editorShell.align-right #mirror,#editorShell.align-right #textInput{text-align:right}
+
+</style><p>'+input.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p></html>');w.document.close();w.focus();w.print()};
+
+document.querySelectorAll('[data-align]').forEach(b=>b.addEventListener('click',()=>{
+  shell.classList.remove('align-center','align-right');
+  if(b.dataset.align!=='left') shell.classList.add('align-'+b.dataset.align);
+  document.querySelectorAll('[data-align]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  render();
+}));
 render();
 </script></body></html>
