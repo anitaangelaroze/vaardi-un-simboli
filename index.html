@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vārdi un simboli</title>
+<style>
+:root{--paper:#fbfaf6;--panel:#fffefa;--ink:#263f59;--muted:#60758a;--line:#d8e0e5;--accent:#718da3;--accent-soft:#eaf0f3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(16px,4vw,54px);background:#fffefa;border-bottom:1px solid var(--line)}
+.brand{font-size:clamp(23px,3vw,34px);font-weight:700;letter-spacing:-.5px}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav a{color:var(--ink);text-decoration:none;padding:10px 12px;border-radius:8px;font-size:14px}
+nav a.active{background:var(--accent-soft);font-weight:700}
+main{max-width:1200px;margin:28px auto;padding:0 18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(18px,3vw,30px);box-shadow:0 5px 20px #253c5008}
+h1{font-size:clamp(25px,3vw,36px);margin:0 0 8px}
+.intro{margin:0 0 24px;color:var(--muted);font-size:16px;line-height:1.5}
+label{display:block;font-size:14px;font-weight:700;margin-bottom:8px}
+.editor{width:100%;min-height:250px;padding:16px;border:2px solid #b9c9d4;border-radius:12px;background:#fff;color:#111;display:block;font-family:Arial,sans-serif;font-size:22px;line-height:1.4;overflow:auto;outline:none}
+.editor:focus{border-color:#6689a3;box-shadow:0 0 0 3px #6689a31c}
+.editor:empty:before{content:attr(data-placeholder);color:#7b8790}
+.word{display:inline-flex;flex-direction:column;vertical-align:bottom;align-items:center;justify-content:flex-end;min-width:28px;max-width:100%;margin:2px 4px 4px 0;line-height:1.15;white-space:pre-wrap}
+.word .pic{height:var(--symbol-size,46px);width:var(--symbol-size,46px);display:flex;align-items:center;justify-content:center;margin-bottom:3px;pointer-events:none}
+.word .pic svg{width:100%;height:100%;display:block}
+.word .txt{display:inline-block;min-width:1px;outline:none;white-space:pre-wrap}
+.word.unknown .pic{border:1px dashed #b9c4cb;border-radius:5px;color:#7c8b95}
+.word.unknown .pic svg{opacity:.45}
+.space{white-space:pre}
+.controls{display:grid;grid-template-columns:1fr 1fr auto;gap:22px;align-items:end;margin-top:22px;padding-top:18px;border-top:1px solid #edf0f1}
+.group-title{font-size:14px;font-weight:700;margin-bottom:9px}
+.buttons{display:flex;gap:7px;flex-wrap:nowrap}
+button{font:700 14px Arial,sans-serif;cursor:pointer;border:1px solid #c9d5dd;border-radius:9px;padding:11px 16px;background:#fff;color:var(--ink);min-height:42px}
+button:hover{background:#f1f5f7}
+button[aria-pressed="true"]{background:#5e788c;color:white;border-color:#5e788c}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions button{white-space:nowrap}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:18px}
+.status{font-size:13px;color:var(--muted);min-height:18px;margin-top:10px}
+@media(max-width:800px){header{align-items:flex-start;flex-direction:column} .controls{grid-template-columns:1fr 1fr}.actions{grid-column:1/-1}.editor{min-height:230px}}
+@media(max-width:480px){.controls{grid-template-columns:1fr}.buttons button{flex:1;padding:10px 7px}.actions button{flex:1}}
+@media print{body{background:white}header nav,.controls,.intro,label,.note,.status{display:none!important}header{border:0;padding:0 0 10px}.brand{font-size:22px}main{margin:0;padding:0}.card{border:0;box-shadow:none;padding:0}.editor{border:0;min-height:0;padding:0;overflow:visible}.word{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Vārdi un simboli</div>
+  <nav aria-label="Galvenā izvēlne"><a class="active" href="#teksts">Teksts ar simboliem</a><a href="#darba-lapa" id="worksheetLink">Izveidot darba lapu</a><a href="#materiali" id="materialsLink">Materiāli</a><a href="#par" id="aboutLink">Par projektu</a></nav>
+</header>
+<main>
+<section class="card" id="teksts">
+<h1>Teksts ar simboliem</h1>
+<p class="intro">Raksti vai ielīmē tekstu. Simboli tiek attēloti virs atpazītajiem vārdiem.</p>
+<label for="editor">Tavs teksts</label>
+<div id="editor" class="editor" contenteditable="true" role="textbox" aria-label="Teksts ar simboliem" aria-multiline="true" data-placeholder="Raksti savu tekstu šeit…"></div>
+<div class="controls">
+  <div><div class="group-title">Simbolu izmērs</div><div class="buttons" id="symbolButtons"><button data-size="small" aria-pressed="false">Mazs</button><button data-size="medium" aria-pressed="true">Vidējs</button><button data-size="large" aria-pressed="false">Liels</button></div></div>
+  <div><div class="group-title">Teksta izmērs</div><div class="buttons" id="textButtons"><button data-size="small" aria-pressed="false">Mazs</button><button data-size="medium" aria-pressed="true">Vidējs</button><button data-size="large" aria-pressed="false">Liels</button></div></div>
+  <div class="actions"><button id="copy">Kopēt tekstu ar simboliem</button><button id="print">Drukāt</button></div>
+</div>
+<div class="status" id="status" aria-live="polite"></div>
+<p class="note">Šī ir izmēģinājuma versija ar vienkāršām paša veidotām ilustrācijām. Tā vēl nav pieslēgta ARASAAC vai Widgit simbolu datubāzei; neatrastiem vārdiem tiek rādīts neitrāls vietturis.</p>
+</section>
+</main>
+<script>
+const editor=document.getElementById('editor'), statusEl=document.getElementById('status');
+const sizePx={small:32,medium:46,large:62}, textPx={small:17,medium:22,large:28};
+let symbolSize='medium', textSize='medium', composing=false;
+const known={
+ 'kaķis':'cat','kaķa':'cat','kaķi':'cat','kaķim':'cat','kaķī':'cat','kaķus':'cat',
+ 'suns':'dog','suņa':'dog','suns':'dog','sunis':'dog','suni':'dog',
+ 'mamma':'person','mammai':'person','mamma':'person','bērns':'person','bērns':'person','bērns':'person','cilvēks':'person',
+ 'sēž':'sit','sēdēt':'sit','sēdēja':'sit','sēžam':'sit','sēdās':'sit',
+ 'krēsls':'chair','krēsla':'chair','krēslā':'chair','krēslu':'chair',
+ 'grāmata':'book','grāmatu':'book','grāmatas':'book','lasa':'book','lasīt':'book',
+ 'bumba':'ball','bumbu':'ball','bumba':'ball','bumba':'ball',
+ 'māja':'house','mājā':'house','mājas':'house','galda':'table','galds':'table','galdā':'table',
+ 'uz':'on','virs':'on','zem':'under','zemāk':'under','aiz':'behind','priekšā':'infront','blakus':'beside','starp':'between','pie':'beside','iekšā':'inside','ārā':'outside','augstāk':'on',
+ 'ir':'link','un':'link','līdz':'link','ēd':'eat','ābolu':'apple','ābols':'apple','guļ':'sleep','skrien':'run','ūdens':'water','saule':'sun'
+};
+const svg=(inner)=>`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;
+function icon(type){
+ const stroke='stroke="#243746" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"';
+ const icons={
+ cat:svg(`<path ${stroke} fill="#d9e0e3" d="M9 43 Q9 28 25 30 L31 19 39 29 Q52 28 56 39 L52 48 34 49 22 53 13 49Z"/><circle ${stroke} fill="#fff" cx="39" cy="34" r="8"/><path ${stroke} fill="none" d="M33 32h1m10 0h1M36 38l4 1 3-2M12 43Q2 40 7 32Q12 28 18 32"/>`),
+ dog:svg(`<path ${stroke} fill="#d8c6a5" d="M9 37Q9 25 22 28L30 22 40 29 50 28 56 37 51 45 30 47 18 50 12 46Z"/><circle ${stroke} fill="#fff" cx="42" cy="34" r="7"/><path ${stroke} fill="none" d="M36 32h1m9 0h1M40 39l4 0M12 37Q3 34 6 27"/>`),
+ person:svg(`<circle ${stroke} fill="#f0d2ad" cx="32" cy="12" r="8"/><path ${stroke} fill="#7d9bb0" d="M23 23h18l5 19H18Z"/><path ${stroke} fill="none" d="M24 28 14 38M40 28l10 10M26 42l-3 16M38 42l4 16"/>`),
+ sit:svg(`<circle ${stroke} fill="#f0d2ad" cx="27" cy="10" r="7"/><path ${stroke} fill="#7d9bb0" d="M24 19h11l5 17H25Z"/><path ${stroke} fill="none" d="M29 26 20 36 38 37 42 49M29 36l-5 19M44 22v35M44 37h15v4H44"/>`),
+ chair:svg(`<path ${stroke} fill="#bd8a54" d="M20 8h7v29h28v6H20Z"/><path ${stroke} fill="#bd8a54" d="M25 37h6v20h-6zM49 43h6v14h-6z"/>`),
+ book:svg(`<path ${stroke} fill="#dce8ef" d="M7 13Q21 7 32 16Q43 7 57 13V51Q43 46 32 55Q21 46 7 51Z"/><path ${stroke} fill="none" d="M32 16v39M14 22q8-3 13 1M14 30q8-3 13 1M39 23q7-4 13-1M39 31q7-4 13-1"/>`),
+ ball:svg(`<circle ${stroke} fill="#d6e5ef" cx="32" cy="32" r="23"/><path ${stroke} fill="none" d="M10 28q16 2 20-19M35 10q-2 18 18 24M15 48q15-12 31 5"/>`),
+ house:svg(`<path ${stroke} fill="#dce8ef" d="M7 29 32 8 57 29V56H7Z"/><path ${stroke} fill="#fff" d="M26 56V37h13v19M14 31h36"/>`),
+ table:svg(`<path ${stroke} fill="#c8a77e" d="M7 23h50v8H7z"/><path ${stroke} fill="#c8a77e" d="M13 31h6v26h-6zM45 31h6v26h-6z"/>`),
+ on:svg(`<rect ${stroke} fill="#dce8ef" x="7" y="34" width="50" height="8" rx="1"/><circle ${stroke} fill="#d7b16d" cx="32" cy="20" r="9"/>`),
+ under:svg(`<rect ${stroke} fill="#dce8ef" x="7" y="15" width="50" height="8" rx="1"/><circle ${stroke} fill="#d7b16d" cx="32" cy="42" r="9"/>`),
+ behind:svg(`<rect ${stroke} fill="#dce8ef" x="26" y="20" width="29" height="36"/><circle ${stroke} fill="#d7b16d" cx="20" cy="34" r="9"/>`),
+ infront:svg(`<rect ${stroke} fill="#dce8ef" x="20" y="13" width="34" height="43"/><circle ${stroke} fill="#d7b16d" cx="17" cy="44" r="10"/>`),
+ beside:svg(`<circle ${stroke} fill="#d7b16d" cx="17" cy="33" r="10"/><rect ${stroke} fill="#dce8ef" x="35" y="22" width="20" height="23" rx="2"/>`),
+ between:svg(`<circle ${stroke} fill="#d7b16d" cx="11" cy="32" r="8"/><circle ${stroke} fill="#d7b16d" cx="53" cy="32" r="8"/><rect ${stroke} fill="#dce8ef" x="23" y="22" width="18" height="20" rx="2"/>`),
+ inside:svg(`<rect ${stroke} fill="#dce8ef" x="10" y="18" width="44" height="38" rx="2"/><circle ${stroke} fill="#d7b16d" cx="32" cy="36" r="9"/>`),
+ outside:svg(`<path ${stroke} fill="#dce8ef" d="M18 23h28v33H18z"/><circle ${stroke} fill="#d7b16d" cx="32" cy="14" r="7"/><path ${stroke} fill="none" d="M5 8v48M59 8v48"/>`),
+ link:svg(`<circle ${stroke} fill="#dce8ef" cx="32" cy="32" r="21"/><path ${stroke} fill="none" d="M20 32h24M32 20v24"/>`),
+ eat:svg(`<circle ${stroke} fill="#f0d2ad" cx="25" cy="13" r="8"/><path ${stroke} fill="#7d9bb0" d="M17 24h17l5 23H15Z"/><path ${stroke} fill="none" d="M32 30 44 35M20 46l-2 12M32 46l4 12"/><circle ${stroke} fill="#d96e62" cx="49" cy="31" r="7"/>`),
+ apple:svg(`<path ${stroke} fill="#d96e62" d="M32 22Q17 12 11 27Q6 44 23 54Q30 57 32 52Q38 58 46 51Q59 39 52 26Q45 14 32 22Z"/><path ${stroke} fill="none" d="M32 22q-1-12 8-15"/>`),
+ sleep:svg(`<path ${stroke} fill="#dce8ef" d="M8 37h48v14H8z"/><circle ${stroke} fill="#f0d2ad" cx="20" cy="29" r="8"/><path ${stroke} fill="none" d="M29 32h22M38 12h8l-8 7h8M48 5h7l-7 6h7"/>`),
+ run:svg(`<circle ${stroke} fill="#f0d2ad" cx="36" cy="10" r="7"/><path ${stroke} fill="#7d9bb0" d="M29 20h10l-3 15-13 4-4-5 10-5Z"/><path ${stroke} fill="none" d="M31 23 18 17M36 34l12 8 8-2M24 37 12 49M39 41l-4 15"/>`),
+ water:svg(`<path ${stroke} fill="#9dc9e2" d="M32 5Q14 28 14 39a18 18 0 0 0 36 0Q50 28 32 5Z"/>`),
+ sun:svg(`<circle ${stroke} fill="#f3d37c" cx="32" cy="32" r="13"/><path ${stroke} fill="none" d="M32 5v9M32 50v9M5 32h9M50 32h9M13 13l7 7M44 44l7 7M51 13l-7 7M20 44l-7 7"/>`)
+ };
+ return icons[type]||null;
+}
+function tokenHTML(raw){
+ const clean=raw.toLocaleLowerCase('lv').replace(/^[\s.,!?;:()[\]{}„“"']+|[\s.,!?;:()[\]{}„“"']+$/g,'');
+ const type=known[clean];
+ const pic=type?icon(type):null;
+ return `<span class="word ${pic?'':'unknown'}" data-raw="${escapeHtml(raw)}"><span class="pic" contenteditable="false">${pic||placeholderSvg()}</span><span class="txt">${escapeHtml(raw)}</span></span>`;
+}
+function placeholderSvg(){return svg(`<rect x="15" y="15" width="34" height="34" fill="#f5f6f6" stroke="#7c8b95" stroke-width="2"/><path d="M23 23h18v18H23z" fill="none" stroke="#b0bac0" stroke-width="1.5"/>`)}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function plainText(){return editor.innerText.replace(/\u00a0/g,' ')}
+function saveCaret(){
+ const sel=window.getSelection(); if(!sel||!sel.rangeCount||!editor.contains(sel.anchorNode))return null;
+ const r=sel.getRangeAt(0), pre=r.cloneRange(); pre.selectNodeContents(editor); pre.setEnd(r.startContainer,r.startOffset);
+ return pre.toString().length;
+}
+function restoreCaret(pos){
+ if(pos==null)return;
+ const walker=document.createTreeWalker(editor,NodeFilter.SHOW_TEXT);let n,remain=pos,last=null;
+ while(n=walker.nextNode()){last=n;if(remain<=n.textContent.length){const r=document.createRange();r.setStart(n,remain);r.collapse(true);const s=window.getSelection();s.removeAllRanges();s.addRange(r);return;}remain-=n.textContent.length;}
+ if(last){const r=document.createRange();r.setStart(last,last.textContent.length);r.collapse(true);const s=window.getSelection();s.removeAllRanges();s.addRange(r);}
+}
+function render(preserve=true){
+ const text=plainText(), pos=preserve?saveCaret():null;
+ if(!text){editor.innerHTML='';return}
+ // Keep line breaks and spaces while wrapping each non-space run as a symbol-supported word.
+ const chunks=text.match(/\s+|[^\s]+/gu)||[];
+ editor.innerHTML=chunks.map(c=>/^\s+$/u.test(c)?`<span class="space">${escapeHtml(c).replace(/\n/g,'<br>')}</span>`:tokenHTML(c)).join('');
+ applySizes(); restoreCaret(pos);
+}
+let queued=false;
+editor.addEventListener('input',()=>{if(composing)return; if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;render(true)})});
+editor.addEventListener('compositionstart',()=>composing=true);
+editor.addEventListener('compositionend',()=>{composing=false;render(true)});
+editor.addEventListener('paste',e=>{e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,t)});
+function applySizes(){editor.style.fontSize=textPx[textSize]+'px';editor.style.setProperty('--symbol-size',sizePx[symbolSize]+'px');editor.querySelectorAll('.pic').forEach(p=>{p.style.width=sizePx[symbolSize]+'px';p.style.height=sizePx[symbolSize]+'px'})}
+function setSizeGroup(id,which){document.querySelectorAll(`#${id} button`).forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.size=== (which==='symbol'?symbolSize:textSize)));b.onclick=()=>{if(which==='symbol')symbolSize=b.dataset.size;else textSize=b.dataset.size;setSizeGroup(id,which);applySizes()}})}
+setSizeGroup('symbolButtons','symbol');setSizeGroup('textButtons','text');applySizes();
+document.getElementById('copy').addEventListener('click',async()=>{const text=plainText();try{await navigator.clipboard.writeText(text);statusEl.textContent='Teksts nokopēts. Simbolu attēli netiek kopēti kā attēli.'}catch(e){statusEl.textContent='Neizdevās kopēt automātiski. Atzīmē tekstu un kopē to manuāli.'}});
+document.getElementById('print').addEventListener('click',()=>window.print());
+function insertInitial(){editor.innerHTML='';}
+document.getElementById('worksheetLink').addEventListener('click',e=>{e.preventDefault();statusEl.textContent='Darba lapu veidošana tiks pievienota nākamajā versijā.'});
+document.getElementById('materialsLink').addEventListener('click',e=>{e.preventDefault();statusEl.textContent='Materiālu bibliotēka vēl tiek izstrādāta.'});
+document.getElementById('aboutLink').addEventListener('click',e=>{e.preventDefault();statusEl.textContent='Prototips vizuālam atbalstam tekstā.'});
+</script>
+</body>
+</html>
