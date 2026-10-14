@@ -5,129 +5,163 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vārdi un simboli</title>
 <style>
-:root{--paper:#fbfaf6;--panel:#fffefa;--ink:#263f59;--muted:#60758a;--line:#d8e0e5;--accent:#718da3;--accent-soft:#eaf0f3;--symbol-size:46px}
+:root{--cream:#f7f5ef;--paper:#fffefa;--ink:#263541;--muted:#637887;--line:#d8e0e3;--blue:#e8f0f3;--accent:#476879}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}
-header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(16px,4vw,54px);background:#fffefa;border-bottom:1px solid var(--line)}
-.brand{font-size:clamp(23px,3vw,34px);font-weight:700;letter-spacing:-.5px}
-nav{display:flex;gap:8px;flex-wrap:wrap}
-nav a{color:var(--ink);text-decoration:none;padding:10px 12px;border-radius:8px;font-size:14px}
-nav a.active{background:var(--accent-soft);font-weight:700}
-main{max-width:1200px;margin:28px auto;padding:0 18px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(18px,3vw,30px);box-shadow:0 5px 20px #253c5008}
-h1{font-size:clamp(25px,3vw,36px);margin:0 0 8px}
-.intro{margin:0 0 24px;color:var(--muted);font-size:16px;line-height:1.5}
-label{display:block;font-size:14px;font-weight:700;margin-bottom:8px}
-.editor{width:100%;min-height:260px;padding:14px;border:2px solid #b9c9d4;border-radius:12px;background:#fff;color:#111;display:block;font-family:Arial,sans-serif;font-size:22px;line-height:1.5;overflow:auto;outline:none;white-space:normal;overflow-wrap:anywhere}
-.editor:focus{border-color:#6689a3;box-shadow:0 0 0 3px #6689a31c}
-.editor:empty:before{content:attr(data-placeholder);color:#7b8790}
-.word{display:inline-flex;flex-direction:column;vertical-align:bottom;align-items:center;justify-content:flex-end;min-width:0;max-width:none;margin:2px 3px 3px 0;padding:0 1px;line-height:1.12;white-space:nowrap;position:relative}
-.word .pic{height:var(--symbol-size);width:var(--symbol-size);display:flex;align-items:center;justify-content:center;margin:0 auto 3px;pointer-events:none;flex:0 0 auto}
-.word .pic svg{width:100%;height:100%;display:block}
-.word .txt{display:block;min-width:1px;white-space:pre}
-.word.unknown .pic{border:1px dashed #b9c4cb;border-radius:5px;color:#7c8b95}
-.space{white-space:pre}
-.controls{display:grid;grid-template-columns:1fr 1fr auto;gap:22px;align-items:end;margin-top:22px;padding-top:18px;border-top:1px solid #edf0f1}
-.group-title{font-size:14px;font-weight:700;margin-bottom:9px}
-.buttons{display:flex;gap:7px;flex-wrap:nowrap}
-button{font:700 14px Arial,sans-serif;cursor:pointer;border:1px solid #c9d5dd;border-radius:9px;padding:11px 16px;background:#fff;color:var(--ink);min-height:42px}
-button:hover{background:#f1f5f7}
-button[aria-pressed="true"]{background:#5e788c;color:white;border-color:#5e788c}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.actions button{white-space:nowrap}
-.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:18px}
-.status{font-size:13px;color:var(--muted);min-height:18px;margin-top:10px}
-@media(max-width:800px){header{align-items:flex-start;flex-direction:column}.controls{grid-template-columns:1fr 1fr}.actions{grid-column:1/-1}}
-@media(max-width:480px){.controls{grid-template-columns:1fr}.buttons button{flex:1;padding:10px 7px}.actions button{flex:1}.editor{font-size:20px}}
-@media print{body{background:white}header nav,.controls,.intro,label,.note,.status{display:none!important}header{border:0;padding:0 0 10px}.brand{font-size:22px}main{margin:0;padding:0}.card{border:0;box-shadow:none;padding:0}.editor{border:0;min-height:0;padding:0;overflow:visible}.word{break-inside:avoid}}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+header{padding:22px 18px 10px;text-align:center}
+h1{font-size:clamp(25px,5vw,36px);margin:0 0 8px;font-weight:700}
+.subtitle{color:var(--muted);margin:0;font-size:16px}
+main{max-width:1000px;margin:0 auto;padding:16px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 3px 14px #2635410a}
+label{display:block;font-weight:700;margin:0 0 9px}
+.toolbar{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 16px}
+.group{flex:1 1 230px;min-width:0}
+.btnrow{display:flex;gap:7px}
+button{font:inherit;border:1px solid #bdcbd1;background:#fff;border-radius:10px;padding:10px 12px;color:var(--ink);cursor:pointer;min-height:42px}
+button:focus-visible,textarea:focus-visible{outline:3px solid #9ab9c7;outline-offset:2px}
+.btnrow button{flex:1;min-width:0}
+button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.primary{background:var(--accent);color:white;border-color:var(--accent)}
+.hint{font-size:14px;color:var(--muted);line-height:1.5;margin:12px 0 0}
+.editor-shell{position:relative;border:1px solid #c9d6db;border-radius:14px;background:#fff;overflow:hidden}
+#mirror,#textInput{font-family:Arial,Helvetica,sans-serif;font-size:22px;line-height:76px;letter-spacing:0;word-spacing:0;padding:34px 12px 14px;margin:0;width:100%;min-height:280px;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;tab-size:4}
+#mirror{position:absolute;inset:0;pointer-events:none;color:var(--ink);overflow:hidden}
+#textInput{position:relative;display:block;resize:vertical;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--ink);border:0;outline:none;overflow:auto}
+#textInput::selection{background:#9ab9c777}
+.mword{position:relative;display:inline;white-space:pre-wrap}
+.mword .symbol{position:absolute;left:0;top:-29px;width:28px;height:28px;object-fit:contain}
+#mirror.no-symbols .symbol{display:none}
+.small-symbols #mirror .symbol{width:20px;height:20px;top:-21px}
+.large-symbols #mirror .symbol{width:38px;height:38px;top:-39px}
+.text-small #mirror,#textInput.text-small{font-size:18px}
+.text-large #mirror,#textInput.text-large{font-size:28px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+@media(max-width:520px){main{padding:10px}.panel{padding:12px}#mirror,#textInput{font-size:20px;padding-left:10px;padding-right:10px} .group{flex-basis:100%}}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">Vārdi un simboli</div>
-  <nav aria-label="Galvenā izvēlne"><a class="active" href="#teksts">Teksts ar simboliem</a><a href="#darba-lapa" id="worksheetLink">Izveidot darba lapu</a><a href="#materiali" id="materialsLink">Materiāli</a><a href="#par" id="aboutLink">Par projektu</a></nav>
+<h1>Vārdi un simboli</h1>
+<p class="subtitle">Raksti tekstu — simboli parādīsies virs atpazītajiem vārdiem.</p>
 </header>
 <main>
-<section class="card" id="teksts">
-<h1>Teksts ar simboliem</h1>
-<p class="intro">Raksti vai ielīmē tekstu. Simboli tiek attēloti virs atpazītajiem vārdiem.</p>
-<label for="editor">Tavs teksts</label>
-<div id="editor" class="editor" contenteditable="true" role="textbox" aria-label="Teksts ar simboliem" aria-multiline="true" data-placeholder="Raksti savu tekstu šeit…"></div>
-<div class="controls">
-  <div><div class="group-title">Simbolu izmērs</div><div class="buttons" id="symbolButtons"><button data-size="small" aria-pressed="false">Mazs</button><button data-size="medium" aria-pressed="true">Vidējs</button><button data-size="large" aria-pressed="false">Liels</button></div></div>
-  <div><div class="group-title">Teksta izmērs</div><div class="buttons" id="textButtons"><button data-size="small" aria-pressed="false">Mazs</button><button data-size="medium" aria-pressed="true">Vidējs</button><button data-size="large" aria-pressed="false">Liels</button></div></div>
-  <div class="actions"><button id="copy">Kopēt tekstu</button><button id="print">Drukāt</button></div>
+<section class="panel" aria-label="Teksta veidotājs">
+<div class="toolbar">
+<div class="group">
+<label>Simbolu lielums</label>
+<div class="btnrow" role="group" aria-label="Simbolu lielums">
+<button type="button" data-symbol="small" aria-pressed="false">Mazs</button>
+<button type="button" data-symbol="medium" aria-pressed="true">Vidējs</button>
+<button type="button" data-symbol="large" aria-pressed="false">Liels</button>
 </div>
-<div class="status" id="status" aria-live="polite"></div>
-<p class="note">Izmēģinājuma versija ar vienkāršām ilustrācijām, nevis oficiālu ARASAAC vai Widgit simbolu kopu. Daļai vārdu vēl nav atbilstoša attēla.</p>
+</div>
+<div class="group">
+<label>Teksta lielums</label>
+<div class="btnrow" role="group" aria-label="Teksta lielums">
+<button type="button" data-text="small" aria-pressed="false">Mazs</button>
+<button type="button" data-text="medium" aria-pressed="true">Vidējs</button>
+<button type="button" data-text="large" aria-pressed="false">Liels</button>
+</div>
+</div>
+</div>
+<label for="textInput">Tavs teksts</label>
+<div class="editor-shell" id="editorShell">
+<div id="mirror" aria-hidden="true"></div>
+<textarea id="textInput" autocapitalize="sentences" spellcheck="false" aria-label="Raksti vai ielīmē tekstu">Kaķis sēž uz krēsla.</textarea>
+</div>
+<div class="actions">
+<button type="button" class="primary" id="copyBtn">Kopēt tekstu</button>
+<button type="button" id="printBtn">Drukāt</button>
+<button type="button" id="clearBtn">Notīrīt</button>
+</div>
+<p class="hint">Raksti, dzēs un ielīmē tekstu parastajā teksta laukā. Tas saglabā latviešu burtus un pieturzīmes. Simboli ir prototipa piemēri, tāpēc tie vēl nav oficiālie ARASAAC simboli.</p>
 </section>
 </main>
+<footer>Vārdi un simboli · prototips</footer>
 <script>
-const editor=document.getElementById('editor'), statusEl=document.getElementById('status');
-const sizePx={small:30,medium:42,large:56}, textPx={small:17,medium:21,large:27};
-let symbolSize='medium', textSize='medium', composing=false, rendering=false;
+const textInput=document.getElementById('textInput');
+const mirror=document.getElementById('mirror');
+const shell=document.getElementById('editorShell');
 const known={
- 'kaķis':'cat','kaķa':'cat','kaķi':'cat','kaķim':'cat','kaķī':'cat','kaķus':'cat',
- 'suns':'dog','suņa':'dog','suni':'dog','sunim':'dog',
- 'mamma':'person','mammai':'person','bērns':'person','bērna':'person','cilvēks':'person',
- 'sēž':'sitting','sēdēt':'sitting','sēdēja':'sitting','sēdēdams':'sitting',
- 'krēsls':'chair','krēsla':'chair','krēslā':'chair','krēslu':'chair',
- 'grāmata':'book','grāmatu':'book','grāmatas':'book','lasa':'reading',
- 'bumba':'ball','bumbu':'ball','māja':'house','mājā':'house','mājas':'house',
- 'galds':'table','galda':'table','galdā':'table',
- 'uz':'on','virs':'on','zem':'under','aiz':'behind','priekšā':'infront','blakus':'beside','starp':'between','pie':'beside','iekšā':'inside','ārā':'outside','augstāk':'above','zemāk':'under',
- 'ir':'link','un':'link','ēd':'eat','ābolu':'apple','ābols':'apple','guļ':'sleep','skrien':'run','ūdens':'water','saule':'sun'
+'kaķis':svg('cat'), 'kaķa':svg('cat'), 'kaķi':svg('cat'),
+'sēž':svg('sit'), 'sēd':svg('sit'), 'sēdēt':svg('sit'),
+'uz':svg('on'), 'zem':svg('under'), 'krēsla':svg('chair'), 'krēsls':svg('chair'),
+'suns':svg('dog'), 'bumba':svg('ball'), 'māja':svg('house'), 'mamma':svg('person'),
+'es':svg('person'), 'skrien':svg('run'), 'guļ':svg('sleep'), 'ēd':svg('eat'),
+'lej':svg('pour'), 'dzer':svg('drink'), 'liels':svg('big'), 'mazs':svg('small'),
+'aiz':svg('behind'), 'priekšā':svg('front'), 'blakus':svg('beside'), 'starp':svg('between'),
+'pie':svg('near'), 'iekšā':svg('inside'), 'ārā':svg('outside')
 };
-const svg=(inner)=>`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;
-const st='stroke="#243746" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"';
-function icon(type){
- const icons={
- cat:svg(`<path ${st} fill="#cbd8df" d="M11 27 13 13 25 21Q32 17 39 21L51 13 53 29Q59 35 53 45Q46 54 32 52Q17 54 10 44Q5 35 11 27Z"/><path ${st} fill="#fff" d="M20 34Q25 28 30 34Q27 41 22 40Z M36 34Q41 28 46 34Q43 41 38 40Z"/><path ${st} fill="none" d="M29 43l3-2 3 2M16 40 5 37M17 44 6 45M47 40l12-3M47 44l11 1"/>`),
- dog:svg(`<path ${st} fill="#d8c6a5" d="M9 32Q10 22 24 25L31 20 41 27 51 26 56 36 50 46 29 48 18 50 11 44Z"/><circle ${st} fill="#fff" cx="42" cy="33" r="7"/><path ${st} fill="none" d="M36 31h1m9 0h1M40 38l4 0M12 34Q3 32 6 25"/>`),
- person:svg(`<circle ${st} fill="#f0d2ad" cx="32" cy="10" r="8"/><path ${st} fill="#7d9bb0" d="M23 21h18l5 20H18Z"/><path ${st} fill="none" d="M24 27 14 37M40 27l10 10M26 41l-3 17M38 41l4 17"/>`),
- sitting:svg(`<circle ${st} fill="#f0d2ad" cx="25" cy="10" r="7"/><path ${st} fill="#7d9bb0" d="M22 19h12l5 14-11 6-7-7Z"/><path ${st} fill="none" d="M27 25 18 34 35 36 44 36M29 37 26 55M44 24v18h13M44 42l-1 14"/>`),
- chair:svg(`<path ${st} fill="#bd8a54" d="M18 7h7v30h31v6H18Z"/><path ${st} fill="#bd8a54" d="M23 37h6v20h-6zM49 43h6v14h-6z"/>`),
- book:svg(`<path ${st} fill="#dce8ef" d="M7 13Q21 7 32 16Q43 7 57 13V51Q43 46 32 55Q21 46 7 51Z"/><path ${st} fill="none" d="M32 16v39M14 22q8-3 13 1M14 30q8-3 13 1M39 23q7-4 13-1M39 31q7-4 13-1"/>`),
- reading:svg(`<circle ${st} fill="#f0d2ad" cx="20" cy="10" r="7"/><path ${st} fill="#7d9bb0" d="M14 20h13l5 18H11Z"/><path ${st} fill="none" d="M17 25 8 34M25 26l12 9M18 38l-3 18M29 38l4 18"/><path ${st} fill="#dce8ef" d="M34 34q9-5 17 0v14q-8-5-17 0zM34 34q-9-5-17 0v14q8-5 17 0z"/>`),
- ball:svg(`<circle ${st} fill="#d6e5ef" cx="32" cy="32" r="23"/><path ${st} fill="none" d="M10 28q16 2 20-19M35 10q-2 18 18 24M15 48q15-12 31 5"/>`),
- house:svg(`<path ${st} fill="#dce8ef" d="M7 29 32 8 57 29V56H7Z"/><path ${st} fill="#fff" d="M26 56V37h13v19M14 31h36"/>`),
- table:svg(`<path ${st} fill="#c8a77e" d="M7 23h50v8H7z"/><path ${st} fill="#c8a77e" d="M13 31h6v26h-6zM45 31h6v26h-6z"/>`),
- on:svg(`<rect ${st} fill="#dce8ef" x="7" y="34" width="50" height="8" rx="1"/><circle ${st} fill="#d7b16d" cx="32" cy="20" r="9"/>`),
- under:svg(`<rect ${st} fill="#dce8ef" x="7" y="15" width="50" height="8" rx="1"/><circle ${st} fill="#d7b16d" cx="32" cy="42" r="9"/>`),
- behind:svg(`<rect ${st} fill="#dce8ef" x="26" y="20" width="29" height="36"/><circle ${st} fill="#d7b16d" cx="20" cy="34" r="9"/>`),
- infront:svg(`<rect ${st} fill="#dce8ef" x="20" y="13" width="34" height="43"/><circle ${st} fill="#d7b16d" cx="17" cy="44" r="10"/>`),
- beside:svg(`<circle ${st} fill="#d7b16d" cx="17" cy="33" r="10"/><rect ${st} fill="#dce8ef" x="35" y="22" width="20" height="23" rx="2"/>`),
- between:svg(`<circle ${st} fill="#d7b16d" cx="11" cy="32" r="8"/><circle ${st} fill="#d7b16d" cx="53" cy="32" r="8"/><rect ${st} fill="#dce8ef" x="23" y="22" width="18" height="20" rx="2"/>`),
- inside:svg(`<rect ${st} fill="#dce8ef" x="10" y="18" width="44" height="38" rx="2"/><circle ${st} fill="#d7b16d" cx="32" cy="36" r="9"/>`),
- outside:svg(`<path ${st} fill="#dce8ef" d="M18 23h28v33H18z"/><circle ${st} fill="#d7b16d" cx="32" cy="14" r="7"/><path ${st} fill="none" d="M5 8v48M59 8v48"/>`),
- above:svg(`<rect ${st} fill="#dce8ef" x="7" y="39" width="50" height="8" rx="1"/><circle ${st} fill="#d7b16d" cx="32" cy="18" r="9"/>`),
- link:svg(`<circle ${st} fill="#dce8ef" cx="32" cy="32" r="21"/><path ${st} fill="none" d="M20 32h24M32 20v24"/>`),
- eat:svg(`<circle ${st} fill="#f0d2ad" cx="25" cy="13" r="8"/><path ${st} fill="#7d9bb0" d="M17 24h17l5 23H15Z"/><path ${st} fill="none" d="M32 30 44 35M20 46l-2 12M32 46l4 12"/><circle ${st} fill="#d96e62" cx="49" cy="31" r="7"/>`),
- apple:svg(`<path ${st} fill="#d96e62" d="M32 22Q17 12 11 27Q6 44 23 54Q30 57 32 52Q38 58 46 51Q59 39 52 26Q45 14 32 22Z"/><path ${st} fill="none" d="M32 22q-1-12 8-15"/>`),
- sleep:svg(`<path ${st} fill="#dce8ef" d="M8 37h48v14H8z"/><circle ${st} fill="#f0d2ad" cx="20" cy="29" r="8"/><path ${st} fill="none" d="M29 32h22M38 12h8l-8 7h8M48 5h7l-7 6h7"/>`),
- run:svg(`<circle ${st} fill="#f0d2ad" cx="36" cy="10" r="7"/><path ${st} fill="#7d9bb0" d="M29 20h10l-3 15-13 4-4-5 10-5Z"/><path ${st} fill="none" d="M31 23 18 17M36 34l12 8 8-2M24 37 12 49M39 41l-4 15"/>`),
- water:svg(`<path ${st} fill="#9dc9e2" d="M32 5Q14 28 14 39a18 18 0 0 0 36 0Q50 28 32 5Z"/>`),
- sun:svg(`<circle ${st} fill="#f3d37c" cx="32" cy="32" r="13"/><path ${st} fill="none" d="M32 5v9M32 50v9M5 32h9M50 32h9M13 13l7 7M44 44l7 7M51 13l-7 7M20 44l-7 7"/>`)
- };
- return icons[type]||null;
+function svg(kind){
+const common='viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"';
+const wrap=x=>`data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg ${common}>${x}</svg>`)}`;
+const shapes={
+cat:'<path fill="#e5b46e" stroke="#394b55" stroke-width="3" d="M14 25L12 8 27 17Q32 15 37 17L52 8 50 27Q56 40 45 48L44 57H36L34 48H28L26 57H18L20 46Q8 37 14 25Z"/><circle cx="25" cy="29" r="2.5" fill="#263541"/><circle cx="40" cy="29" r="2.5" fill="#263541"/><path d="M29 36Q32 40 35 36M32 32V36" stroke="#263541" stroke-width="2" fill="none"/>',
+sit:'<circle cx="33" cy="12" r="8" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M31 22L27 39 42 42 48 31M28 38L17 48 31 49M41 42L42 54H53" stroke="#587d91" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M25 23L14 35" stroke="#587d91" stroke-width="7" stroke-linecap="round"/>',
+on:'<rect x="8" y="39" width="48" height="7" rx="2" fill="#8a9da5"/><rect x="17" y="18" width="30" height="20" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/><path d="M32 34V7M24 15L32 7 40 15" stroke="#527f92" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+under:'<rect x="8" y="10" width="48" height="7" rx="2" fill="#8a9da5"/><rect x="17" y="29" width="30" height="20" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/><path d="M32 20V56M24 48L32 56 40 48" stroke="#527f92" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+chair:'<path d="M17 10H47V36H17ZM20 36V56M44 36V56M17 37H47" stroke="#8d7156" stroke-width="6" fill="#e8d5b9" stroke-linejoin="round"/>',
+dog:'<path d="M14 22L8 12 22 17Q34 12 44 20L55 15 52 31Q53 45 40 48L39 57H31L29 47H22L19 57H11L15 43Q8 33 14 22Z" fill="#d4a36c" stroke="#394b55" stroke-width="3"/><circle cx="28" cy="28" r="2.5"/><circle cx="42" cy="28" r="2.5"/>',
+ball:'<circle cx="32" cy="32" r="23" fill="#e58d79" stroke="#394b55" stroke-width="3"/><path d="M12 24Q32 38 52 24M23 11Q38 31 23 53M42 12Q25 32 42 52" stroke="#fff4e4" stroke-width="3" fill="none"/>',
+house:'<path d="M7 30L32 8 57 30M14 27V56H50V27" stroke="#394b55" stroke-width="3" fill="#e8d5b9"/><rect x="27" y="38" width="12" height="18" fill="#8ba8b4"/>',
+person:'<circle cx="32" cy="13" r="9" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M32 24V43M32 29L17 39M32 29L47 39M32 43L20 58M32 43L44 58" stroke="#587d91" stroke-width="7" stroke-linecap="round"/>',
+run:'<circle cx="39" cy="12" r="7" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M34 23L25 36 40 39M31 28L17 25M27 36L13 51M40 39L52 52" stroke="#587d91" stroke-width="7" stroke-linecap="round" fill="none"/>',
+sleep:'<circle cx="27" cy="29" r="10" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M36 36H53V50H11V43H36" fill="#8ba8b4" stroke="#394b55" stroke-width="2"/>',
+eat:'<circle cx="32" cy="16" r="10" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M32 27V53M32 33L45 40" stroke="#587d91" stroke-width="8" stroke-linecap="round"/><circle cx="49" cy="42" r="5" fill="#e7b96e"/>',
+drink:'<path d="M19 23H46L42 54H23Z" fill="#a8d0df" stroke="#394b55" stroke-width="3"/><path d="M27 8L40 20" stroke="#587d91" stroke-width="4" stroke-linecap="round"/>',
+big:'<rect x="7" y="7" width="50" height="50" rx="6" fill="#a8c3ce" stroke="#394b55" stroke-width="3"/>',
+small:'<rect x="20" y="20" width="24" height="24" rx="4" fill="#e7b96e" stroke="#394b55" stroke-width="3"/>',
+behind:'<rect x="9" y="28" width="25" height="25" rx="3" fill="#a8c3ce" stroke="#394b55" stroke-width="2"/><rect x="29" y="10" width="25" height="25" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/>',
+front:'<rect x="9" y="10" width="25" height="25" rx="3" fill="#a8c3ce" stroke="#394b55" stroke-width="2"/><rect x="29" y="28" width="25" height="25" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/>',
+beside:'<rect x="5" y="20" width="23" height="25" rx="3" fill="#a8c3ce" stroke="#394b55" stroke-width="2"/><rect x="36" y="20" width="23" height="25" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/>',
+between:'<rect x="3" y="20" width="17" height="25" rx="2" fill="#a8c3ce" stroke="#394b55" stroke-width="2"/><rect x="44" y="20" width="17" height="25" rx="2" fill="#a8c3ce" stroke="#394b55" stroke-width="2"/><rect x="24" y="20" width="17" height="25" rx="2" fill="#e7b96e" stroke="#394b55" stroke-width="2"/>',
+near:'<circle cx="18" cy="32" r="10" fill="#a8c3ce" stroke="#394b55" stroke-width="2"/><circle cx="44" cy="32" r="10" fill="#e7b96e" stroke="#394b55" stroke-width="2"/>',
+inside:'<rect x="8" y="8" width="48" height="48" rx="5" fill="#dce9ed" stroke="#394b55" stroke-width="3"/><circle cx="32" cy="32" r="10" fill="#e7b96e" stroke="#394b55" stroke-width="2"/>',
+outside:'<rect x="8" y="8" width="48" height="48" rx="5" fill="none" stroke="#394b55" stroke-width="3" stroke-dasharray="5 4"/><circle cx="32" cy="32" r="10" fill="#e7b96e" stroke="#394b55" stroke-width="2"/>'
+};
+return wrap(shapes[kind]||shapes.person);
 }
-function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function placeholderSvg(){return svg(`<rect x="15" y="15" width="34" height="34" fill="#f5f6f6" stroke="#7c8b95" stroke-width="2"/><path d="M23 23h18v18H23z" fill="none" stroke="#b0bac0" stroke-width="1.5"/>`)}
-function wordHTML(raw){const clean=raw.toLocaleLowerCase('lv').replace(/^[.,!?;:()[\]{}„“"']+|[.,!?;:()[\]{}„“"']+$/g,'');const pic=icon(known[clean]);return `<span class="word ${pic?'':'unknown'}"><span class="pic" contenteditable="false">${pic||placeholderSvg()}</span><span class="txt">${escapeHtml(raw)}</span></span>`}
-function plainText(){return editor.innerText.replace(/\u00a0/g,' ')}
-function caretOffset(){const sel=getSelection();if(!sel||!sel.rangeCount||!editor.contains(sel.anchorNode))return null;const r=sel.getRangeAt(0),pre=r.cloneRange();pre.selectNodeContents(editor);pre.setEnd(r.startContainer,r.startOffset);return pre.toString().length}
-function restoreCaret(pos){if(pos==null)return;const walker=document.createTreeWalker(editor,NodeFilter.SHOW_TEXT);let n,remain=pos,last=null;while((n=walker.nextNode())){last=n;if(remain<=n.textContent.length){const r=document.createRange();r.setStart(n,remain);r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r);return}remain-=n.textContent.length}if(last){const r=document.createRange();r.setStart(last,last.textContent.length);r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r)}}
-function render(){if(rendering)return;rendering=true;const pos=caretOffset();const text=plainText();if(!text){editor.innerHTML='';rendering=false;return}const chunks=text.match(/\s+|[^\s]+/gu)||[];editor.innerHTML=chunks.map(c=>/^\s+$/u.test(c)?`<span class="space">${escapeHtml(c).replace(/\n/g,'<br>')}</span>`:wordHTML(c)).join('');applySizes();restoreCaret(pos);rendering=false}
-editor.addEventListener('input',()=>{if(!composing)render()});editor.addEventListener('compositionstart',()=>composing=true);editor.addEventListener('compositionend',()=>{composing=false;render()});
-editor.addEventListener('paste',e=>{e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,t)});
-function applySizes(){editor.style.fontSize=textPx[textSize]+'px';editor.style.setProperty('--symbol-size',sizePx[symbolSize]+'px')}
-function setupGroup(id,which){document.querySelectorAll(`#${id} button`).forEach(b=>b.addEventListener('click',()=>{if(which==='symbol')symbolSize=b.dataset.size;else textSize=b.dataset.size;document.querySelectorAll(`#${id} button`).forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.size===b.dataset.size)));applySizes()}))}
-setupGroup('symbolButtons','symbol');setupGroup('textButtons','text');
-document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(plainText());statusEl.textContent='Teksts nokopēts.'}catch(e){statusEl.textContent='Neizdevās kopēt automātiski. Atzīmē tekstu un kopē to manuāli.'}});
-document.getElementById('print').addEventListener('click',()=>window.print());
-document.getElementById('worksheetLink').addEventListener('click',e=>{e.preventDefault();statusEl.textContent='Darba lapu veidošana tiks pievienota nākamajā versijā.'});
-document.getElementById('materialsLink').addEventListener('click',e=>{e.preventDefault();statusEl.textContent='Materiālu bibliotēka vēl tiek izstrādāta.'});
-document.getElementById('aboutLink').addEventListener('click',e=>{e.preventDefault();statusEl.textContent='Šis ir prototips vizuālam atbalstam tekstā.'});
+function render(){
+const value=textInput.value;
+const parts=value.match(/\s+|[^\s]+/gu)||[];
+mirror.innerHTML=parts.map(part=>{
+ if(/^\s+$/u.test(part)) return part.replace(/ /g,'&nbsp;').replace(/\n/g,'<br>');
+ const match=part.toLocaleLowerCase('lv').match(/^[\p{L}]+/u);
+ const word=match?match[0]:'';
+ const icon=known[word];
+ const safe=part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ return `<span class="mword">${icon?`<img class="symbol" src="${icon}" alt="">`:''}${safe}</span>`;
+}).join('');
+mirror.scrollTop=textInput.scrollTop;
+mirror.scrollLeft=textInput.scrollLeft;
+mirror.style.height=textInput.offsetHeight+'px';
+}
+textInput.addEventListener('input',render);
+textInput.addEventListener('scroll',()=>{mirror.scrollTop=textInput.scrollTop;mirror.scrollLeft=textInput.scrollLeft});
+new ResizeObserver(()=>render()).observe(textInput);
+document.querySelectorAll('[data-symbol]').forEach(b=>b.addEventListener('click',()=>{
+ shell.classList.remove('small-symbols','large-symbols');
+ if(b.dataset.symbol!=='medium')shell.classList.add(b.dataset.symbol+'-symbols');
+ document.querySelectorAll('[data-symbol]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+}));
+document.querySelectorAll('[data-text]').forEach(b=>b.addEventListener('click',()=>{
+ mirror.classList.remove('text-small','text-large');textInput.classList.remove('text-small','text-large');
+ if(b.dataset.text!=='medium'){mirror.classList.add('text-'+b.dataset.text);textInput.classList.add('text-'+b.dataset.text)}
+ document.querySelectorAll('[data-text]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ render();
+}));
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+ try{await navigator.clipboard.writeText(textInput.value);alert('Teksts nokopēts.')}
+ catch(e){textInput.focus();textInput.select();alert('Teksts ir iezīmēts. Izvēlies Kopēt savā iPad izvēlnē.')}
+});
+document.getElementById('clearBtn').addEventListener('click',()=>{if(confirm('Vai tiešām notīrīt tekstu?')){textInput.value='';render();textInput.focus()}});
+document.getElementById('printBtn').addEventListener('click',()=>{
+ const w=window.open('','_blank');
+ if(!w){window.print();return}
+ w.document.write('<!doctype html><html lang="lv"><head><meta charset="utf-8"><title>Vārdi un simboli</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#263541}p{font-size:22px;line-height:1.8}</style></head><body><p>'+textInput.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')+'</p></body></html>');
+ w.document.close();w.focus();w.print();
+});
+render();
 </script>
-</body>
-</html>
+</body></html>
