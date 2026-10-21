@@ -145,5 +145,12 @@ document.querySelectorAll('[data-align]').forEach(b=>b.addEventListener('click',
   document.querySelectorAll('[data-align]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
   render();
 }));
+
+document.getElementById('saveBtn')?.addEventListener('click',()=>{
+ try{localStorage.setItem('vaardi-un-simboli-teksts',input.value);alert('Teksts saglabāts šajā pārlūkā.')}
+ catch(e){alert('Saglabāšana šajā pārlūkā nav pieejama. Izmanto Kopēt tekstu.')}
+});
+try{const saved=localStorage.getItem('vaardi-un-simboli-teksts');if(saved!==null)input.value=saved}catch(e){}
+
 render();
 </script></body></html>
