@@ -1,69 +1,781 @@
-<!doctype html>
-<html lang="lv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vārdi un simboli</title>
-<style>
-:root{--bg:#f7f5ef;--paper:#fffefa;--ink:#263541;--muted:#637887;--line:#d3dde1;--accent:#476879;--sel:#e8f0f3}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-header{text-align:center;padding:20px 14px 10px}h1{font-size:clamp(27px,4vw,36px);margin:0 0 8px}header p{color:var(--muted);margin:0}
-main{max-width:1000px;margin:auto;padding:14px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:15px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}label{font-weight:bold;display:block}
-.align{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.align span{font-size:14px;color:var(--muted)}
-button{font:16px Arial,sans-serif;color:var(--ink);background:white;border:1px solid #bdcbd1;border-radius:10px;min-height:42px;padding:9px 12px;cursor:pointer}
-button[aria-pressed=true]{background:var(--sel);border-color:var(--accent);font-weight:bold}
-.align button{width:42px;min-width:42px;padding:7px}.align svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.editor{position:relative;background:white;border:1px solid #c9d6db;border-radius:14px;min-height:270px;overflow:hidden}
-#mirror,#entry{font-family:Arial,Helvetica,sans-serif;font-size:22px;line-height:1.2;letter-spacing:0;word-spacing:0;padding:38px 14px 12px;margin:0;width:100%;min-height:270px;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
-#mirror{position:absolute;inset:0;z-index:3;pointer-events:none;color:var(--ink);overflow:hidden}
-#entry{position:relative;z-index:2;display:block;resize:vertical;overflow:auto;border:0;outline:0;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--ink);border-radius:14px}
-#entry::selection{background:#9ab9c766}
-.token{position:relative;display:inline-block;white-space:pre;padding-top:36px;vertical-align:baseline}
-.pic{position:absolute;left:50%;transform:translateX(-50%);top:3px;width:28px;height:28px;object-fit:contain}
-.editor.symbol-small .token{padding-top:26px}.editor.symbol-small .pic{width:20px;height:20px;top:3px}
-.editor.symbol-medium .token{padding-top:36px}.editor.symbol-medium .pic{width:28px;height:28px;top:3px}
-.editor.symbol-large .token{padding-top:46px}.editor.symbol-large .pic{width:38px;height:38px;top:3px}
-.editor.text-small #mirror,.editor.text-small #entry{font-size:18px}
-.editor.text-medium #mirror,.editor.text-medium #entry{font-size:22px}
-.editor.text-large #mirror,.editor.text-large #entry{font-size:28px}
-.editor.align-center #mirror,.editor.align-center #entry{text-align:center}
-.editor.align-right #mirror,.editor.align-right #entry{text-align:right}
-.controls{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}.group{flex:1 1 230px;min-width:0}.group label{margin-bottom:8px}.row{display:flex;gap:7px}.row button{flex:1;min-width:0}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.primary{background:var(--accent);color:white;border-color:var(--accent)}
-.note{font-size:14px;color:var(--muted);line-height:1.5;margin:12px 0 0}footer{text-align:center;padding:18px;color:var(--muted);font-size:13px}
-@media(max-width:520px){main{padding:9px}.panel{padding:11px}.group{flex-basis:100%}#mirror,#entry{font-size:20px;padding-left:11px;padding-right:11px}.editor.text-medium #mirror,.editor.text-medium #entry{font-size:20px}.editor.text-large #mirror,.editor.text-large #entry{font-size:26px}}
-</style></head><body>
-<header><h1>Vārdi un simboli</h1><p>Raksti tekstu — simboli parādīsies virs atpazītajiem vārdiem.</p></header>
-<main><section class="panel">
-<div class="top"><label for="entry">Tavs teksts</label><div class="align"><span>Izlīdzinājums:</span>
-<button data-align="left" aria-label="Pa kreisi" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 9h11M4 13h16M4 17h11M4 21h16"/></svg></button>
-<button data-align="center" aria-label="Centrā" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M3 5h18M6 9h12M3 13h18M6 17h12M3 21h18"/></svg></button>
-<button data-align="right" aria-label="Pa labi" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 5h16M9 9h11M4 13h16M9 17h11M4 21h16"/></svg></button></div></div>
-<div class="editor align-left symbol-medium text-medium" id="editor"><div id="mirror" aria-hidden="true"></div><textarea id="entry" spellcheck="false" aria-label="Raksti vai ielīmē tekstu">Kaķis sēž uz krēsla.</textarea></div>
-<div class="controls"><div class="group"><label>Simbolu lielums</label><div class="row"><button data-symbol="small" aria-pressed="false">Mazs</button><button data-symbol="medium" aria-pressed="true">Vidējs</button><button data-symbol="large" aria-pressed="false">Liels</button></div></div>
-<div class="group"><label>Teksta lielums</label><div class="row"><button data-text="small" aria-pressed="false">Mazs</button><button data-text="medium" aria-pressed="true">Vidējs</button><button data-text="large" aria-pressed="false">Liels</button></div></div></div>
-<div class="actions"><button class="primary" id="copy">Kopēt tekstu</button><button id="print">Drukāt</button><button id="clear">Notīrīt</button></div>
-<p class="note">Simboli ir prototipa zīmējumi un tiek rādīti atpazītajiem vārdiem.</p>
-</section></main><footer>Vārdi un simboli · prototips</footer>
-<script>
-(()=>{const entry=document.getElementById('entry'),mirror=document.getElementById('mirror'),editor=document.getElementById('editor');
-const dict={kaķis:'cat',kaķa:'cat',kaķi:'cat','sēž':'sit','sēdēt':'sit',uz:'on',zem:'under',krēsls:'chair',krēsla:'chair',krēslā:'chair',suns:'dog',bumba:'ball',māja:'house',es:'person',mamma:'person'};
-const art={
-cat:'<path fill="#e5b46e" stroke="#394b55" stroke-width="3" d="M14 25L12 8 27 17Q32 15 37 17L52 8 50 27Q56 40 45 48L44 57H36L34 48H28L26 57H18L20 46Q8 37 14 25Z"/><circle cx="25" cy="29" r="2.5"/><circle cx="40" cy="29" r="2.5"/><path d="M29 36Q32 40 35 36" stroke="#263541" stroke-width="2" fill="none"/>',
-sit:'<circle cx="33" cy="12" r="8" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M31 22L27 39 42 42 48 31M28 38L17 48 31 49M41 42L42 54H53M25 23L14 35" stroke="#587d91" stroke-width="8" stroke-linecap="round" fill="none"/>',
-on:'<rect x="8" y="39" width="48" height="7" rx="2" fill="#8a9da5"/><rect x="17" y="18" width="30" height="20" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/><path d="M32 34V7M24 15L32 7 40 15" stroke="#527f92" stroke-width="4" fill="none"/>',
-under:'<rect x="8" y="10" width="48" height="7" rx="2" fill="#8a9da5"/><rect x="17" y="29" width="30" height="20" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/><path d="M32 20V56M24 48L32 56 40 48" stroke="#527f92" stroke-width="4" fill="none"/>',
-chair:'<path d="M17 10H47V36H17ZM20 36V56M44 36V56M17 37H47" stroke="#8d7156" stroke-width="6" fill="#e8d5b9"/>',
-dog:'<path d="M14 22L8 12 22 17Q34 12 44 20L55 15 52 31Q53 45 40 48L39 57H31L29 47H22L19 57H11L15 43Q8 33 14 22Z" fill="#d4a36c" stroke="#394b55" stroke-width="3"/>',
-ball:'<circle cx="32" cy="32" r="23" fill="#e58d79" stroke="#394b55" stroke-width="3"/><path d="M12 24Q32 38 52 24M23 11Q38 31 23 53" stroke="#fff4e4" stroke-width="3" fill="none"/>',
-house:'<path d="M7 30L32 8 57 30M14 27V56H50V27" stroke="#394b55" stroke-width="3" fill="#e8d5b9"/><rect x="27" y="38" width="12" height="18" fill="#8ba8b4"/>',
-person:'<circle cx="32" cy="13" r="9" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M32 24V43M32 29L17 39M32 29L47 39M32 43L20 58M32 43L44 58" stroke="#587d91" stroke-width="7" stroke-linecap="round"/>'};
-const svg=k=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">'+art[k]+'</svg>');
-function render(){const parts=entry.value.match(/\\s+|[^\\s]+/gu)||[];mirror.innerHTML=parts.map(p=>{if(/^\\s+$/u.test(p))return p.replace(/ /g,'&nbsp;').replace(/\\n/g,'<br>');const m=p.toLocaleLowerCase('lv').match(/^[\\p{L}]+/u),k=m&&dict[m[0]],safe=p.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');return '<span class="token">'+(k?'<img class="pic" src="'+svg(k)+'" alt="">':'')+safe+'</span>'}).join('');mirror.scrollTop=entry.scrollTop;mirror.scrollLeft=entry.scrollLeft;mirror.style.height=entry.offsetHeight+'px'}
-entry.addEventListener('input',render);entry.addEventListener('scroll',()=>{mirror.scrollTop=entry.scrollTop;mirror.scrollLeft=entry.scrollLeft});if(window.ResizeObserver)new ResizeObserver(render).observe(entry);
-document.querySelectorAll('[data-align]').forEach(b=>b.onclick=()=>{editor.classList.remove('align-left','align-center','align-right');editor.classList.add('align-'+b.dataset.align);document.querySelectorAll('[data-align]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});
-document.querySelectorAll('[data-symbol]').forEach(b=>b.onclick=()=>{editor.classList.remove('symbol-small','symbol-medium','symbol-large');editor.classList.add('symbol-'+b.dataset.symbol);document.querySelectorAll('[data-symbol]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))});
-document.querySelectorAll('[data-text]').forEach(b=>b.onclick=()=>{editor.classList.remove('text-small','text-medium','text-large');editor.classList.add('text-'+b.dataset.text);document.querySelectorAll('[data-text]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});
-document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(entry.value);alert('Teksts nokopēts.')}catch(e){entry.focus();entry.select();alert('Teksts ir iezīmēts — izvēlies Kopēt iPad izvēlnē.')}};
-document.getElementById('clear').onclick=()=>{if(confirm('Vai notīrīt visu tekstu?')){entry.value='';render();entry.focus()}};
-document.getElementById('print').onclick=()=>{const w=window.open('','_blank');if(!w){alert('Pārlūks bloķēja drukāšanas logu. Atļauj uznirstošos logus un mēģini vēlreiz.');return}const s=entry.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');w.document.write('<!doctype html><html lang="lv"><meta charset="utf-8"><title>Vārdi un simboli</title><style>body{font-family:Arial;padding:24px;color:#263541}p{font-size:22px;line-height:1.8;white-space:pre-wrap}</style><p>'+s+'</p></html>');w.document.close();w.focus();setTimeout(()=>w.print(),300)};
-render()})();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vārdi un simboli</title>
+  <style>
+    :root {
+      --bg-color: #f7f6f0;
+      --card-bg: #ffffff;
+      --border-color: #d1d5db;
+      --text-color: #111827;
+      --subtext-color: #6b7280;
+      --btn-bg: #ffffff;
+      --btn-active: #4b637a;
+      --btn-active-text: #ffffff;
+      --btn-border: #d1d5db;
+      --btn-hover: #f3f4f6;
+      --accent-color: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--subtext-color);
+      font-size: 1rem;
+    }
+
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .control-label {
+      font-size: 0.9rem;
+      color: var(--subtext-color);
+    }
+
+    .btn-group {
+      display: flex;
+      border: 1px solid var(--btn-border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .btn-group button {
+      background: transparent;
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--text-color);
+      border-right: 1px solid var(--btn-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .btn-group button:last-child {
+      border-right: none;
+    }
+
+    .btn-group button.active {
+      background: var(--btn-active);
+      color: var(--btn-active-text);
+    }
+
+    .btn-group button:hover:not(.active) {
+      background: var(--btn-hover);
+    }
+
+    /* Editor Box */
+    .editor-container {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 250px;
+      max-height: 500px;
+      overflow-y: auto;
+      background: #fff;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      outline: none;
+      margin-bottom: 24px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .editor-container:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    }
+
+    .editor-container[data-align="left"] { text-align: left; }
+    .editor-container[data-align="center"] { text-align: center; }
+    .editor-container[data-align="right"] { text-align: right; }
+
+    /* Word Card Container */
+    .word-card {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 2px 2px;
+      padding: 2px 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      vertical-align: bottom;
+      user-select: none;
+      transition: background 0.15s;
+    }
+
+    .word-card:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    .word-card img {
+      object-fit: contain;
+      margin-bottom: 4px;
+      pointer-events: none;
+    }
+
+    .word-card span {
+      display: block;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    /* Size Controls Dynamic Adjustments */
+    .editor-container[data-symbol-size="small"] .word-card img { height: 35px; width: 35px; }
+    .editor-container[data-symbol-size="medium"] .word-card img { height: 55px; width: 55px; }
+    .editor-container[data-symbol-size="large"] .word-card img { height: 80px; width: 80px; }
+
+    .editor-container[data-text-size="small"] { font-size: 1rem; }
+    .editor-container[data-text-size="medium"] { font-size: 1.25rem; }
+    .editor-container[data-text-size="large"] { font-size: 1.6rem; }
+
+    .editor-container[data-text-size="small"] .word-card span { font-size: 0.95rem; }
+    .editor-container[data-text-size="medium"] .word-card span { font-size: 1.15rem; }
+    .editor-container[data-text-size="large"] .word-card span { font-size: 1.4rem; }
+
+    /* Bottom Options Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .option-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    /* Action Buttons */
+    .actions-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .action-btn.primary {
+      background: #4b637a;
+      color: #fff;
+      border-color: #4b637a;
+    }
+
+    .action-btn:hover {
+      opacity: 0.9;
+    }
+
+    .footer-note {
+      font-size: 0.85rem;
+      color: var(--subtext-color);
+      margin-top: 16px;
+    }
+
+    footer {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: var(--subtext-color);
+    }
+
+    /* Modal for editing symbol */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--subtext-color);
+    }
+
+    .modal-body {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: flex-start;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      color: var(--subtext-color);
+      font-weight: 600;
+    }
+
+    .input-group input {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .symbol-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .symbol-option {
+      border: 2px solid transparent;
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9fafb;
+    }
+
+    .symbol-option:hover {
+      border-color: var(--accent-color);
+    }
+
+    .symbol-option.selected {
+      border-color: var(--accent-color);
+      background: #eff6ff;
+    }
+
+    .symbol-option img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      header, .card-header, .options-grid, .actions-row, .footer-note, footer {
+        display: none !important;
+      }
+      .main-card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+      .editor-container {
+        border: none;
+        max-height: none;
+        overflow: visible;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Vārdi un simboli</h1>
+    <p class="subtitle">Raksti tekstu — simboli parādīsies virs atpazītajiem vārdiem. Uzklikšķini uz vārda, lai pielāgotu simbolu.</p>
+  </header>
+
+  <main class="main-card">
+    <div class="card-header">
+      <div class="card-title">Tavs teksts</div>
+      <div class="control-group">
+        <span class="control-label">Izlīdzinājums:</span>
+        <div class="btn-group" id="align-controls">
+          <button data-align="left" class="active" title="Pa kreisi">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="15" y1="12" x2="3" y2="12"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg>
+          </button>
+          <button data-align="center" title="Centrēt">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg>
+          </button>
+          <button data-align="right" title="Pa labi">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="9" y2="12"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Unified Editor -->
+    <div id="editor" class="editor-container" contenteditable="true" data-align="left" data-symbol-size="medium" data-text-size="medium" spellcheck="false"></div>
+
+    <div class="options-grid">
+      <div class="option-item">
+        <div class="option-title">Simbolu lielums</div>
+        <div class="btn-group" id="symbol-size-controls">
+          <button data-size="small">Mazs</button>
+          <button data-size="medium" class="active">Vidējs</button>
+          <button data-size="large">Liels</button>
+        </div>
+      </div>
+
+      <div class="option-item">
+        <div class="option-title">Teksta lielums</div>
+        <div class="btn-group" id="text-size-controls">
+          <button data-size="small">Mazs</button>
+          <button data-size="medium" class="active">Vidējs</button>
+          <button data-size="large">Liels</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <button class="action-btn primary" id="btn-copy">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        Kopēt tekstu
+      </button>
+      <button class="action-btn" id="btn-print">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Drukāt
+      </button>
+      <button class="action-btn" id="btn-clear">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        Notīrīt
+      </button>
+    </div>
+
+    <div class="footer-note">
+      Simboli tiek meklēti ARASAAC datubāzē ar automātisku fona tulkošanu un vārda pamatformu piemeklēšanu.
+    </div>
+  </main>
+
+  <footer>
+    Vārdi un simboli · prototips
+  </footer>
+
+  <!-- Modal for customizing symbol -->
+  <div class="modal-backdrop" id="custom-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Rediģēt simbolu</div>
+        <button class="close-btn" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label for="search-term-input">Meklēšanas vārds (LV vai EN):</label>
+          <input type="text" id="search-term-input" placeholder="Piemēram, māja, kaķis, run...">
+        </div>
+        <div class="input-group">
+          <label>Izvēlies simbolu:</label>
+          <div class="symbol-results" id="symbol-results-grid">
+            <!-- Results will be injected here -->
+          </div>
+        </div>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" id="hide-symbol-check"> Nerādīt simbolu šim vārdam
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Built-in basic offline translation / lemma dictionary
+    const dictionary = {
+      "kaķis": "cat", "kaķi": "cat", "kaķim": "cat", "kaķa": "cat",
+      "suns": "dog", "suņa": "dog", "sunim": "dog", "suni": "dog",
+      "māja": "house", "mājā": "house", "mājās": "home", "māju": "house",
+      "sēž": "sit", "sēdēt": "sit",
+      "uz": "on",
+      "sola": "bench", "sola": "bench", "soliņš": "bench",
+      "skola": "school", "skolā": "school",
+      "grāmata": "book", "grāmatu": "book",
+      "ūdens": "water",
+      "saule": "sun",
+      "koks": "tree",
+      "auto": "car", "mašīna": "car",
+      "bērns": "child", "bērni": "children",
+      "mamma": "mother", "māte": "mother",
+      "tētis": "father", "tēvs": "father",
+      "ēst": "eat", "ēd": "eat",
+      "dzert": "drink", "dzer": "drink", "dzir": "drink",
+      "iet": "walk", "eju": "walk", "iet": "go",
+      "skriet": "run", "skrien": "run",
+      "gulēt": "sleep", "guļ": "sleep",
+      "laimīgs": "happy", "priecīgs": "happy",
+      "skumjš": "sad", "bēdīgs": "sad"
+    };
+
+    const symbolCache = {};
+    let activeCardNode = null;
+
+    const editor = document.getElementById('editor');
+    const modal = document.getElementById('custom-modal');
+    const modalClose = document.getElementById('modal-close');
+    const searchTermInput = document.getElementById('search-term-input');
+    const symbolResultsGrid = document.getElementById('symbol-results-grid');
+    const hideSymbolCheck = document.getElementById('hide-symbol-check');
+
+    // Controls setup
+    document.querySelectorAll('#align-controls button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#align-controls button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        editor.setAttribute('data-align', btn.dataset.align);
+      });
+    });
+
+    document.querySelectorAll('#symbol-size-controls button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#symbol-size-controls button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        editor.setAttribute('data-symbol-size', btn.dataset.size);
+      });
+    });
+
+    document.querySelectorAll('#text-size-controls button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#text-size-controls button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        editor.setAttribute('data-text-size', btn.dataset.size);
+      });
+    });
+
+    // Handle Editor Typing & Space conversion
+    editor.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        const range = selection.getRangeAt(0);
+        let node = range.startContainer;
+
+        // If inside text node, process word
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.nodeValue;
+          const pos = range.startOffset;
+          const lastWordMatch = text.slice(0, pos).match(/([a-zA-ZāčēģīķļņšūžĀČĒĢĪĶĻŅŠŪŽ]+)$/);
+
+          if (lastWordMatch) {
+            e.preventDefault();
+            const word = lastWordMatch[1];
+            const wordStartPos = pos - word.length;
+
+            // Split text around the word
+            const beforeText = text.slice(0, wordStartPos);
+            const afterText = text.slice(pos);
+
+            node.nodeValue = beforeText;
+
+            // Create word card
+            const card = createWordCard(word);
+            
+            // Insert element
+            if (node.nextSibling) {
+              node.parentNode.insertBefore(card, node.nextSibling);
+            } else {
+              node.parentNode.appendChild(card);
+            }
+
+            // Create space text node
+            const spaceNode = document.createTextNode(e.key === 'Enter' ? '\n' : '\u00A0');
+            card.parentNode.insertBefore(spaceNode, card.nextSibling);
+
+            if (afterText) {
+              const afterNode = document.createTextNode(afterText);
+              spaceNode.parentNode.insertBefore(afterNode, spaceNode.nextSibling);
+            }
+
+            // Set cursor after space
+            const newRange = document.createRange();
+            newRange.setStart(spaceNode, 1);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+
+            // Fetch symbol for card
+            fetchSymbolForCard(card, word);
+          }
+        }
+      }
+    });
+
+    // Helper to create word DOM node
+    function createWordCard(word, symbolUrl = null) {
+      const card = document.createElement('span');
+      card.className = 'word-card';
+      card.contentEditable = 'false';
+      card.dataset.word = word;
+
+      const img = document.createElement('img');
+      img.alt = word;
+      img.style.display = symbolUrl ? 'block' : 'none';
+      if (symbolUrl) img.src = symbolUrl;
+
+      const label = document.createElement('span');
+      label.textContent = word;
+
+      card.appendChild(img);
+      card.appendChild(label);
+
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openEditModal(card);
+      });
+
+      return card;
+    }
+
+    // ARASAAC API search logic
+    async function fetchSymbolForCard(card, word) {
+      const cleanWord = word.toLowerCase().trim();
+      let query = dictionary[cleanWord] || cleanWord;
+
+      // Check cache first
+      if (symbolCache[query]) {
+        applySymbolToCard(card, symbolCache[query]);
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://api.arasaac.org/v1/pictograms/en/search/${encodeURIComponent(query)}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.length > 0) {
+            const pictoId = data[0]._id;
+            const imgUrl = `https://api.arasaac.org/v1/pictograms/${pictoId}`;
+            symbolCache[query] = imgUrl;
+            applySymbolToCard(card, imgUrl);
+          }
+        }
+      } catch (err) {
+        console.warn('ARASAAC fetch failed:', err);
+      }
+    }
+
+    function applySymbolToCard(card, imgUrl) {
+      const img = card.querySelector('img');
+      if (imgUrl) {
+        img.src = imgUrl;
+        img.style.display = 'block';
+      } else {
+        img.style.display = 'none';
+      }
+    }
+
+    // Modal Editing Logic
+    function openEditModal(card) {
+      activeCardNode = card;
+      const word = card.dataset.word;
+      searchTermInput.value = word;
+      hideSymbolCheck.checked = card.querySelector('img').style.display === 'none';
+
+      modal.classList.add('active');
+      searchModalSymbols(word);
+    }
+
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    searchTermInput.addEventListener('input', (e) => {
+      const term = e.target.value.trim();
+      if (term) {
+        searchModalSymbols(term);
+      }
+    });
+
+    hideSymbolCheck.addEventListener('change', (e) => {
+      if (activeCardNode) {
+        const img = activeCardNode.querySelector('img');
+        img.style.display = e.target.checked ? 'none' : 'block';
+      }
+    });
+
+    async function searchModalSymbols(term) {
+      symbolResultsGrid.innerHTML = 'Ielādē...';
+      const cleanTerm = term.toLowerCase().trim();
+      const query = dictionary[cleanTerm] || cleanTerm;
+
+      try {
+        const res = await fetch(`https://api.arasaac.org/v1/pictograms/en/search/${encodeURIComponent(query)}`);
+        if (res.ok) {
+          const data = await res.json();
+          symbolResultsGrid.innerHTML = '';
+          if (data && data.length > 0) {
+            data.slice(0, 12).forEach(item => {
+              const imgUrl = `https://api.arasaac.org/v1/pictograms/${item._id}`;
+              const opt = document.createElement('div');
+              opt.className = 'symbol-option';
+              opt.innerHTML = `<img src="${imgUrl}" alt="symbol">`;
+              opt.addEventListener('click', () => {
+                applySymbolToCard(activeCardNode, imgUrl);
+                modal.classList.remove('active');
+              });
+              symbolResultsGrid.appendChild(opt);
+            });
+          } else {
+            symbolResultsGrid.innerHTML = 'Netika atrasts neviens simbols';
+          }
+        }
+      } catch (e) {
+        symbolResultsGrid.innerHTML = 'Kļūda meklējot simbolus';
+      }
+    }
+
+    // Action buttons
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      editor.innerHTML = '';
+      editor.focus();
+    });
+
+    document.getElementById('btn-print').addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const text = editor.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Teksts nokopēts starpliktuvē!');
+      });
+    });
+
+    // Initialize with default text
+    window.addEventListener('DOMContentLoaded', () => {
+      const defaultText = "Kaķis sēž uz sola";
+      editor.focus();
+      const words = defaultText.split(' ');
+      words.forEach((w, index) => {
+        const card = createWordCard(w);
+        editor.appendChild(card);
+        fetchSymbolForCard(card, w);
+        if (index < words.length - 1) {
+          editor.appendChild(document.createTextNode('\u00A0'));
+        }
+      });
+    });
+  </script>
+</body>
+</html>
