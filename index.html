@@ -1,156 +1,64 @@
 <!doctype html>
-<html lang="lv">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="lv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Vārdi un simboli</title>
 <style>
-:root{--cream:#f7f5ef;--paper:#fffefa;--ink:#263541;--muted:#637887;--line:#d8e0e3;--blue:#e8f0f3;--accent:#476879}
-*{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-header{text-align:center;padding:22px 18px 10px}
-h1{font-size:clamp(25px,5vw,36px);margin:0 0 8px}
-.subtitle{color:var(--muted);margin:0;font-size:16px}
-main{max-width:1000px;margin:0 auto;padding:16px}
-.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 3px 14px #2635410a}
-.toolbar{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px}
-.group{flex:1 1 230px;min-width:0}
-label{display:block;font-weight:700;margin:0 0 9px}
-.btnrow{display:flex;gap:7px}
-button{font:inherit;border:1px solid #bdcbd1;background:#fff;border-radius:10px;padding:10px 12px;color:var(--ink);cursor:pointer;min-height:42px}
-.btnrow button{flex:1;min-width:0}
-button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
-button:focus-visible,textarea:focus-visible{outline:3px solid #9ab9c7;outline-offset:2px}
-.editor-shell{position:relative;border:1px solid #c9d6db;border-radius:14px;background:#fff;overflow:hidden}
-#mirror,#textInput{font-family:Arial,Helvetica,sans-serif;font-size:22px;line-height:84px;letter-spacing:0;word-spacing:0;padding:38px 18px 16px;margin:0;width:100%;min-height:280px;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;tab-size:4}
-#mirror{position:absolute;z-index:3;inset:0;pointer-events:none;color:transparent;overflow:hidden}
-#textInput{position:relative;z-index:2;display:block;resize:vertical;background:transparent;color:var(--ink);-webkit-text-fill-color:var(--ink);caret-color:var(--ink);border:0;outline:none;overflow:auto}
-#textInput::selection{background:#9ab9c777}
-.mword{position:relative;display:inline-block;white-space:pre;vertical-align:baseline}
-.mword .symbol{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 1px);width:28px;height:28px;object-fit:contain}
-.small-symbols #mirror .symbol{width:20px;height:20px;bottom:calc(100% + 0px)}
-.large-symbols #mirror .symbol{width:38px;height:38px;bottom:calc(100% + 0px)}
-.text-small #mirror,#textInput.text-small{font-size:18px}
-.text-large #mirror,#textInput.text-large{font-size:28px}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.primary{background:var(--accent);color:white;border-color:var(--accent)}
-.hint{font-size:14px;color:var(--muted);line-height:1.5;margin:12px 0 0}
-footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
-@media(max-width:520px){main{padding:10px}.panel{padding:12px}.group{flex-basis:100%}#mirror,#textInput{font-size:20px;padding-left:12px;padding-right:12px}}
-@media print{body{background:white}.toolbar,.actions,.hint,header .subtitle{display:none}.panel{border:0;box-shadow:none}#textInput{color:transparent}}
-
-.text-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}
-.text-heading label{margin:0}
-.align-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.align-controls>span{font-size:14px;color:var(--muted);margin-right:3px}
-.align-controls button{min-height:36px;min-width:40px;padding:5px 9px;border-radius:8px}
-.align-controls button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
-.align-icon{display:block;font-size:20px;line-height:1;letter-spacing:-3px;transform:scaleX(.9)}
-.center-icon{text-align:center}
-.right-icon{text-align:right}
-#mirror{text-align:left}
-#textInput{text-align:left}
-#editorShell.align-center #mirror,#editorShell.align-center #textInput{text-align:center}
-#editorShell.align-right #mirror,#editorShell.align-right #textInput{text-align:right}
-
-
-.text-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}
-.text-heading label{margin:0}
-.align-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.align-controls>span{font-size:14px;color:var(--muted);margin-right:3px}
-.align-controls button{width:42px;min-width:42px;min-height:38px;padding:7px;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.align-controls svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.align-controls button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
-#mirror{text-align:left}
-#textInput{text-align:left}
-#editorShell.align-center #mirror,#editorShell.align-center #textInput{text-align:center}
-#editorShell.align-right #mirror,#editorShell.align-right #textInput{text-align:right}
-
-</style>
-</head>
-<body>
-<header><h1>Vārdi un simboli</h1><p class="subtitle">Raksti tekstu — simboli parādīsies virs atpazītajiem vārdiem.</p></header>
+:root{--bg:#f7f5ef;--paper:#fffefa;--ink:#263541;--muted:#637887;--line:#d3dde1;--accent:#476879;--sel:#e8f0f3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+header{text-align:center;padding:20px 14px 10px}h1{font-size:clamp(27px,4vw,36px);margin:0 0 8px}header p{color:var(--muted);margin:0}
+main{max-width:1000px;margin:auto;padding:14px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:15px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}label{font-weight:bold;display:block}
+.align{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.align span{font-size:14px;color:var(--muted)}
+button{font:16px Arial,sans-serif;color:var(--ink);background:white;border:1px solid #bdcbd1;border-radius:10px;min-height:42px;padding:9px 12px;cursor:pointer}
+button[aria-pressed=true]{background:var(--sel);border-color:var(--accent);font-weight:bold}
+.align button{width:42px;min-width:42px;padding:7px}.align svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.editor{position:relative;background:white;border:1px solid #c9d6db;border-radius:14px;min-height:270px;overflow:hidden}
+#mirror,#entry{font:22px/82px Arial,Helvetica,sans-serif;letter-spacing:0;word-spacing:0;padding:36px 14px 12px;margin:0;width:100%;min-height:270px;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
+#mirror{position:absolute;inset:0;z-index:3;pointer-events:none;color:transparent;overflow:hidden}
+#entry{position:relative;z-index:2;display:block;resize:vertical;overflow:auto;border:0;outline:0;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--ink);border-radius:14px}
+#entry::selection{background:#9ab9c766}.token{position:relative;display:inline-block;white-space:pre}
+.pic{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 1px);width:28px;height:28px;object-fit:contain}
+.editor.symbol-small .pic{width:20px;height:20px;bottom:calc(100% + 1px)}.editor.symbol-large .pic{width:38px;height:38px;bottom:100%}
+.editor.text-small #mirror,.editor.text-small #entry{font-size:18px}.editor.text-medium #mirror,.editor.text-medium #entry{font-size:22px}.editor.text-large #mirror,.editor.text-large #entry{font-size:28px}
+.editor.align-center #mirror,.editor.align-center #entry{text-align:center}.editor.align-right #mirror,.editor.align-right #entry{text-align:right}
+.controls{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}.group{flex:1 1 230px;min-width:0}.group label{margin-bottom:8px}.row{display:flex;gap:7px}.row button{flex:1;min-width:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.primary{background:var(--accent);color:white;border-color:var(--accent)}
+.note{font-size:14px;color:var(--muted);line-height:1.5;margin:12px 0 0}footer{text-align:center;padding:18px;color:var(--muted);font-size:13px}
+@media(max-width:520px){main{padding:9px}.panel{padding:11px}.group{flex-basis:100%}#mirror,#entry{font-size:20px;padding-left:11px;padding-right:11px}.editor.text-medium #mirror,.editor.text-medium #entry{font-size:20px}.editor.text-large #mirror,.editor.text-large #entry{font-size:26px}}
+</style></head><body>
+<header><h1>Vārdi un simboli</h1><p>Raksti tekstu — simboli parādīsies virs atpazītajiem vārdiem.</p></header>
 <main><section class="panel">
-<div class="text-heading">
-<label for="textInput">Tavs teksts</label>
-<div class="align-controls" role="group" aria-label="Teksta un simbolu izlīdzinājums">
-<span>Izlīdzinājums:</span>
-<button type="button" data-align="left" aria-label="Pa kreisi" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 9h11M4 13h16M4 17h11M4 21h16"/></svg></button>
-<button type="button" data-align="center" aria-label="Centrā" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18M6 9h12M3 13h18M6 17h12M3 21h18"/></svg></button>
-<button type="button" data-align="right" aria-label="Pa labi" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M9 9h11M4 13h16M9 17h11M4 21h16"/></svg></button>
-</div></div>
-<div class="editor-shell" id="editorShell">
-<div id="mirror" aria-hidden="true"></div>
-<textarea id="textInput" spellcheck="false" aria-label="Raksti vai ielīmē tekstu">Kaķis sēž uz krēsla.</textarea>
-</div>
-<div class="toolbar">
-<div class="group"><label>Simbolu lielums</label><div class="btnrow" role="group" aria-label="Simbolu lielums"><button type="button" data-symbol="small" aria-pressed="false">Mazs</button><button type="button" data-symbol="medium" aria-pressed="true">Vidējs</button><button type="button" data-symbol="large" aria-pressed="false">Liels</button></div></div>
-<div class="group"><label>Teksta lielums</label><div class="btnrow" role="group" aria-label="Teksta lielums"><button type="button" data-text="small" aria-pressed="false">Mazs</button><button type="button" data-text="medium" aria-pressed="true">Vidējs</button><button type="button" data-text="large" aria-pressed="false">Liels</button></div></div>
-</div>
-<div class="actions"><button class="primary" id="copyBtn" type="button">Kopēt tekstu</button><button id="printBtn" type="button">Drukāt</button><button id="clearBtn" type="button">Notīrīt</button></div>
-<p class="hint">Raksti, dzēs un ielīmē tekstu parastajā teksta laukā. Tas saglabā latviešu burtus un pieturzīmes. Simboli ir prototipa piemēri, nevis oficiālie ARASAAC simboli.</p>
+<div class="top"><label for="entry">Tavs teksts</label><div class="align"><span>Izlīdzinājums:</span>
+<button data-align="left" aria-label="Pa kreisi" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 9h11M4 13h16M4 17h11M4 21h16"/></svg></button>
+<button data-align="center" aria-label="Centrā" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M3 5h18M6 9h12M3 13h18M6 17h12M3 21h18"/></svg></button>
+<button data-align="right" aria-label="Pa labi" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 5h16M9 9h11M4 13h16M9 17h11M4 21h16"/></svg></button></div></div>
+<div class="editor align-left symbol-medium text-medium" id="editor"><div id="mirror" aria-hidden="true"></div><textarea id="entry" spellcheck="false" aria-label="Raksti vai ielīmē tekstu">Kaķis sēž uz krēsla.</textarea></div>
+<div class="controls"><div class="group"><label>Simbolu lielums</label><div class="row"><button data-symbol="small" aria-pressed="false">Mazs</button><button data-symbol="medium" aria-pressed="true">Vidējs</button><button data-symbol="large" aria-pressed="false">Liels</button></div></div>
+<div class="group"><label>Teksta lielums</label><div class="row"><button data-text="small" aria-pressed="false">Mazs</button><button data-text="medium" aria-pressed="true">Vidējs</button><button data-text="large" aria-pressed="false">Liels</button></div></div></div>
+<div class="actions"><button class="primary" id="copy">Kopēt tekstu</button><button id="print">Drukāt</button><button id="clear">Notīrīt</button></div>
+<p class="note">Simboli ir prototipa zīmējumi un tiek rādīti atpazītajiem vārdiem.</p>
 </section></main><footer>Vārdi un simboli · prototips</footer>
 <script>
-const input=document.getElementById('textInput'),mirror=document.getElementById('mirror'),shell=document.getElementById('editorShell');
-function icon(kind){const common='viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"';const shapes={
-cat:'<path fill="#e5b46e" stroke="#394b55" stroke-width="3" d="M14 25L12 8 27 17Q32 15 37 17L52 8 50 27Q56 40 45 48L44 57H36L34 48H28L26 57H18L20 46Q8 37 14 25Z"/><circle cx="25" cy="29" r="2.5"/><circle cx="40" cy="29" r="2.5"/><path d="M29 36Q32 40 35 36M32 32V36" stroke="#263541" stroke-width="2" fill="none"/>',
-sit:'<circle cx="33" cy="12" r="8" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M31 22L27 39 42 42 48 31M28 38L17 48 31 49M41 42L42 54H53" stroke="#587d91" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M25 23L14 35" stroke="#587d91" stroke-width="7" stroke-linecap="round"/>',
-on:'<rect x="8" y="39" width="48" height="7" rx="2" fill="#8a9da5"/><rect x="17" y="18" width="30" height="20" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/><path d="M32 34V7M24 15L32 7 40 15" stroke="#527f92" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
-chair:'<path d="M17 10H47V36H17ZM20 36V56M44 36V56M17 37H47" stroke="#8d7156" stroke-width="6" fill="#e8d5b9" stroke-linejoin="round"/>',
-person:'<circle cx="32" cy="13" r="9" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M32 24V43M32 29L17 39M32 29L47 39M32 43L20 58M32 43L44 58" stroke="#587d91" stroke-width="7" stroke-linecap="round"/>',
+(()=>{const entry=document.getElementById('entry'),mirror=document.getElementById('mirror'),editor=document.getElementById('editor');
+const dict={kaķis:'cat',kaķa:'cat',kaķi:'cat','sēž':'sit','sēdēt':'sit',uz:'on',zem:'under',krēsls:'chair',krēsla:'chair',krēslā:'chair',suns:'dog',bumba:'ball',māja:'house',es:'person',mamma:'person'};
+const art={
+cat:'<path fill="#e5b46e" stroke="#394b55" stroke-width="3" d="M14 25L12 8 27 17Q32 15 37 17L52 8 50 27Q56 40 45 48L44 57H36L34 48H28L26 57H18L20 46Q8 37 14 25Z"/><circle cx="25" cy="29" r="2.5"/><circle cx="40" cy="29" r="2.5"/><path d="M29 36Q32 40 35 36" stroke="#263541" stroke-width="2" fill="none"/>',
+sit:'<circle cx="33" cy="12" r="8" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M31 22L27 39 42 42 48 31M28 38L17 48 31 49M41 42L42 54H53M25 23L14 35" stroke="#587d91" stroke-width="8" stroke-linecap="round" fill="none"/>',
+on:'<rect x="8" y="39" width="48" height="7" rx="2" fill="#8a9da5"/><rect x="17" y="18" width="30" height="20" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/><path d="M32 34V7M24 15L32 7 40 15" stroke="#527f92" stroke-width="4" fill="none"/>',
+under:'<rect x="8" y="10" width="48" height="7" rx="2" fill="#8a9da5"/><rect x="17" y="29" width="30" height="20" rx="3" fill="#e7b96e" stroke="#394b55" stroke-width="2"/><path d="M32 20V56M24 48L32 56 40 48" stroke="#527f92" stroke-width="4" fill="none"/>',
+chair:'<path d="M17 10H47V36H17ZM20 36V56M44 36V56M17 37H47" stroke="#8d7156" stroke-width="6" fill="#e8d5b9"/>',
 dog:'<path d="M14 22L8 12 22 17Q34 12 44 20L55 15 52 31Q53 45 40 48L39 57H31L29 47H22L19 57H11L15 43Q8 33 14 22Z" fill="#d4a36c" stroke="#394b55" stroke-width="3"/>',
-ball:'<circle cx="32" cy="32" r="23" fill="#e58d79" stroke="#394b55" stroke-width="3"/><path d="M12 24Q32 38 52 24M23 11Q38 31 23 53M42 12Q25 32 42 52" stroke="#fff4e4" stroke-width="3" fill="none"/>',
-house:'<path d="M7 30L32 8 57 30M14 27V56H50V27" stroke="#394b55" stroke-width="3" fill="#e8d5b9"/><rect x="27" y="38" width="12" height="18" fill="#8ba8b4"/>'
-};return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg ${common}>${shapes[kind]||shapes.person}</svg>`)}
-const dict={kaķis:'cat',kaķa:'cat',kaķi:'cat','sēž':'sit','sēdēt':'sit',uz:'on',zem:'on',krēsla:'chair',krēsls:'chair',suns:'dog',bumba:'ball',māja:'house',es:'person',mamma:'person'};
-function render(){const parts=input.value.match(/\s+|[^\s]+/gu)||[];mirror.innerHTML=parts.map(p=>{if(/^\s+$/u.test(p))return p.replace(/ /g,'&nbsp;').replace(/\n/g,'<br>');const m=p.toLocaleLowerCase('lv').match(/^[\p{L}]+/u);const k=m&&dict[m[0]];const safe=p.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');return `<span class="mword">${k?`<img class="symbol" src="${icon(k)}" alt="">`:''}${safe}</span>`}).join('');mirror.scrollTop=input.scrollTop;mirror.scrollLeft=input.scrollLeft;mirror.style.height=input.offsetHeight+'px'}
-input.addEventListener('input',render);input.addEventListener('scroll',()=>{mirror.scrollTop=input.scrollTop;mirror.scrollLeft=input.scrollLeft});new ResizeObserver(render).observe(input);
-document.querySelectorAll('[data-symbol]').forEach(b=>b.onclick=()=>{shell.classList.remove('small-symbols','large-symbols');if(b.dataset.symbol!=='medium')shell.classList.add(b.dataset.symbol+'-symbols');document.querySelectorAll('[data-symbol]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))});
-document.querySelectorAll('[data-text]').forEach(b=>b.onclick=()=>{mirror.classList.remove('text-small','text-large');input.classList.remove('text-small','text-large');if(b.dataset.text!=='medium'){mirror.classList.add('text-'+b.dataset.text);input.classList.add('text-'+b.dataset.text)}document.querySelectorAll('[data-text]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});
-document.getElementById('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(input.value);alert('Teksts nokopēts.')}catch(e){input.focus();input.select();alert('Teksts ir iezīmēts. Izvēlies Kopēt savā iPad izvēlnē.')}};
-document.getElementById('clearBtn').onclick=()=>{if(confirm('Vai tiešām notīrīt tekstu?')){input.value='';render();input.focus()}};
-document.getElementById('printBtn').onclick=()=>{const w=window.open('','_blank');if(!w){window.print();return}w.document.write('<!doctype html><html lang="lv"><meta charset="utf-8"><title>Vārdi un simboli</title><style>body{font-family:Arial;padding:24px;color:#263541}p{font-size:22px;line-height:1.8;white-space:pre-wrap}
-.text-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}
-.text-heading label{margin:0}
-.align-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.align-controls>span{font-size:14px;color:var(--muted);margin-right:3px}
-.align-controls button{min-height:36px;min-width:40px;padding:5px 9px;border-radius:8px}
-.align-controls button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
-.align-icon{display:block;font-size:20px;line-height:1;letter-spacing:-3px;transform:scaleX(.9)}
-.center-icon{text-align:center}
-.right-icon{text-align:right}
-#mirror{text-align:left}
-#textInput{text-align:left}
-#editorShell.align-center #mirror,#editorShell.align-center #textInput{text-align:center}
-#editorShell.align-right #mirror,#editorShell.align-right #textInput{text-align:right}
-
-
-.text-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}
-.text-heading label{margin:0}
-.align-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.align-controls>span{font-size:14px;color:var(--muted);margin-right:3px}
-.align-controls button{width:42px;min-width:42px;min-height:38px;padding:7px;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.align-controls svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.align-controls button[aria-pressed="true"]{background:var(--blue);border-color:var(--accent);font-weight:700}
-#mirror{text-align:left}
-#textInput{text-align:left}
-#editorShell.align-center #mirror,#editorShell.align-center #textInput{text-align:center}
-#editorShell.align-right #mirror,#editorShell.align-right #textInput{text-align:right}
-
-</style><p>'+input.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p></html>');w.document.close();w.focus();w.print()};
-
-document.querySelectorAll('[data-align]').forEach(b=>b.addEventListener('click',()=>{
-  shell.classList.remove('align-center','align-right');
-  if(b.dataset.align!=='left') shell.classList.add('align-'+b.dataset.align);
-  document.querySelectorAll('[data-align]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
-  render();
-}));
-
-document.getElementById('saveBtn')?.addEventListener('click',()=>{
- try{localStorage.setItem('vaardi-un-simboli-teksts',input.value);alert('Teksts saglabāts šajā pārlūkā.')}
- catch(e){alert('Saglabāšana šajā pārlūkā nav pieejama. Izmanto Kopēt tekstu.')}
-});
-try{const saved=localStorage.getItem('vaardi-un-simboli-teksts');if(saved!==null)input.value=saved}catch(e){}
-
-render();
+ball:'<circle cx="32" cy="32" r="23" fill="#e58d79" stroke="#394b55" stroke-width="3"/><path d="M12 24Q32 38 52 24M23 11Q38 31 23 53" stroke="#fff4e4" stroke-width="3" fill="none"/>',
+house:'<path d="M7 30L32 8 57 30M14 27V56H50V27" stroke="#394b55" stroke-width="3" fill="#e8d5b9"/><rect x="27" y="38" width="12" height="18" fill="#8ba8b4"/>',
+person:'<circle cx="32" cy="13" r="9" fill="#efc8a4" stroke="#394b55" stroke-width="2"/><path d="M32 24V43M32 29L17 39M32 29L47 39M32 43L20 58M32 43L44 58" stroke="#587d91" stroke-width="7" stroke-linecap="round"/>'
+};
+const svg=k=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">'+art[k]+'</svg>');
+function render(){const parts=entry.value.match(/\s+|[^\s]+/gu)||[];mirror.innerHTML=parts.map(p=>{if(/^\s+$/u.test(p))return p.replace(/ /g,'&nbsp;').replace(/\n/g,'<br>');const m=p.toLocaleLowerCase('lv').match(/^[\p{L}]+/u),k=m&&dict[m[0]],safe=p.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');return '<span class="token">'+(k?'<img class="pic" src="'+svg(k)+'" alt="">':'')+safe+'</span>'}).join('');mirror.scrollTop=entry.scrollTop;mirror.scrollLeft=entry.scrollLeft;mirror.style.height=entry.offsetHeight+'px'}
+entry.addEventListener('input',render);entry.addEventListener('scroll',()=>{mirror.scrollTop=entry.scrollTop;mirror.scrollLeft=entry.scrollLeft});if(window.ResizeObserver)new ResizeObserver(render).observe(entry);
+document.querySelectorAll('[data-align]').forEach(b=>b.onclick=()=>{editor.classList.remove('align-left','align-center','align-right');editor.classList.add('align-'+b.dataset.align);document.querySelectorAll('[data-align]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});
+document.querySelectorAll('[data-symbol]').forEach(b=>b.onclick=()=>{editor.classList.remove('symbol-small','symbol-medium','symbol-large');editor.classList.add('symbol-'+b.dataset.symbol);document.querySelectorAll('[data-symbol]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))});
+document.querySelectorAll('[data-text]').forEach(b=>b.onclick=()=>{editor.classList.remove('text-small','text-medium','text-large');editor.classList.add('text-'+b.dataset.text);document.querySelectorAll('[data-text]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(entry.value);alert('Teksts nokopēts.')}catch(e){entry.focus();entry.select();alert('Teksts ir iezīmēts — izvēlies Kopēt iPad izvēlnē.')}};
+document.getElementById('clear').onclick=()=>{if(confirm('Vai notīrīt visu tekstu?')){entry.value='';render();entry.focus()}};
+document.getElementById('print').onclick=()=>{const w=window.open('','_blank');if(!w){alert('Pārlūks bloķēja drukāšanas logu. Atļauj uznirstošos logus un mēģini vēlreiz.');return}const s=entry.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');w.document.write('<!doctype html><html lang="lv"><meta charset="utf-8"><title>Vārdi un simboli</title><style>body{font-family:Arial;padding:24px;color:#263541}p{font-size:22px;line-height:1.8;white-space:pre-wrap}</style><p>'+s+'</p></html>');w.document.close();w.focus();setTimeout(()=>w.print(),300)};
+render()})();
 </script></body></html>
